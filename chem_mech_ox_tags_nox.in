@@ -1,0 +1,5 @@
+* Ox-tagged reactions for use with NOx tagging scheme
+* All reactions must be on a single line
+
+          O_X + OH -> OH                                                  ; 2.2e-11, 120
+          OH + O3_X -> OH                                                 ; 1.7e-12, -940

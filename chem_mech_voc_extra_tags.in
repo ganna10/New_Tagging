@@ -1,0 +1,12 @@
+* This file contains extra reactions which produce tagged species
+* All consumption reactions should already be accounted for in the ho2_tags and ox_tags files
+
+* Inorganic reactions producing HO2
+* (HO2NO2 is already included as a reservoir species in the ho2_tags file)
+* (reactions of OH with O and O3 producing HO2 are already accounted for in chem_mech_ox_tags_voc.in)
+ H2O2 + OH -> HO2_X_XTR + H2O2 + OH ; 2.9e-12, -160
+
+* Inorganic reactions producing O
+ [jo2_X_STR->,jo2_b] O2 + hv -> 2 * O_X_STR + O2
+ [jn2o_X_STR->,jn2o] N2O + hv -> O1D_X_STR + N2O
+ OH + OH -> O_X_XTR + 2 * OH ; 1.8e-12

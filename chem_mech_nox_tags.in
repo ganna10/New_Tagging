@@ -1,0 +1,80 @@
+* The following reactions follow the "N" in emitted NOx.
+* Some of them also produce NO2_X_... from reaction of tagged NO_ with peroxy radicals
+* Subsequent reactions of Ox tags are handled in a different file
+* tmb: 20140530
+ [jno2a->,jno2] NO2_ + hv -> NO_
+ [jn2o5a->,jn2o5_a] NO3NO2_ + hv -> NO2_
+ [jn2o5b->,jn2o5_a] NO2NO3_ + hv -> NO3_
+ [jhno3a->,jhno3] HNO3_ + hv -> NO2_
+ [jno3aa->,jno3_a] NO3_ + hv -> .89 * NO2_ + .11 * NO_
+ [jno3ab->,jno3_b] NO3_ + hv -> .89 * NO2_ + .11 * NO_
+ [jpana->,jpan] PAN_ + hv -> .6 * NO2_ + .4 * NO3_
+ [jmpana->,jpan] MPAN_ + hv -> NO2_
+ [jho2no2aa->,jho2no2_a] HO2NO2_ + hv -> .33 * NO3_ + .66 * NO2_
+ [jho2no2ab->,jho2no2_b] HO2NO2_ + hv -> .33 * NO3_ + .66 * NO2_
+ [jonitra->,jch3cho] ONITR_ + hv -> NO2_
+          NO_ + HO2 -> NO2_ + NO2_X + HO2                                        ; 3.5e-12, 250
+          NO_ + O3 -> NO2_ + O3                                          ; 3e-12, -1500
+          NO2_ + O -> NO_ + O                                            ; 5.1e-12, 210
+          NO2_ + O3 -> NO3_ + O3                                         ; 1.2e-13, -2450
+          NO3_ + HO2 -> HO2 + NO2_                                       ; 3.5e-12
+          NO2_ + NO3 + M -> NO3NO2_ + NO3 + M                            ; 2.e-30,4.4, 1.4e-12,.7, .6
+          NO2 + NO3_ + M -> NO2NO3_ + NO2 + M                            ; 2.e-30,4.4, 1.4e-12,.7, .6
+ [usr_XNO2NO3_M]  NO3NO2_ + M -> NO2_ + M
+ [usr_NO2XNO3_M]  NO2NO3_ + M -> NO3_ + M
+          NO2_ + OH + M -> HNO3_ + OH + M                                ; 1.80e-30, 3.0, 2.8e-11, 0.0, 0.6
+ [usr_XHNO3_OH] HNO3_ + OH -> NO3_ + OH 
+          NO3_ + NO -> NO2_ + NO                                         ; 1.5e-11, 170
+          NO3 + NO_ -> NO2_ + NO3                                        ; 1.5e-11, 170
+          NO2_ + HO2 + M -> HO2NO2_ + HO2 + M                            ; 2.0e-31,3.4, 2.9e-12,1.1, .6
+          HO2NO2_ + OH -> NO2_ + OH                                      ; 1.3e-12, 380
+ [usr_XHO2NO2_M]  HO2NO2_ + M -> NO2_ + M
+ [usr_XNO2NO3_aer] NO3NO2_ -> HNO3_
+ [usr_NO2XNO3_aer] NO2NO3_ -> HNO3_
+ [usr_XNO3_aer] NO3_  -> HNO3_
+ [usr_XNO2_aer] NO2_  -> 0.5 * NO_ + 0.5 * HNO3_
+          CH3O2 + NO_ -> CH3O2 + NO2_ + NO2_X                                   ; 2.8e-12, 300 
+          HOCH2OO + NO_ -> HOCH2OO + NO2_ + NO2_X                              ; 2.6e-12, 265
+          CH2O + NO3_ -> CH2O + HNO3_                                    ; 6.0e-13, -2058
+          EO2 + NO_ -> EO2 + NO2_ + NO2_X                                       ; 4.2e-12,180
+          C2H5O2 + NO_ -> C2H5O2 + NO2_ + NO2_X                                 ; 2.6e-12, 365
+          C3H6 + NO3_ -> ONIT_ + C3H6                                    ; 4.6e-13,-1156
+          PO2 + NO_ -> PO2 + NO2_ + NO2_X                                        ; 4.2e-12, 180
+          CH3CHO + NO3_ -> CH3CHO + HNO3_                                ; 1.4e-12, -1900
+          CH3CO3 + NO_ -> CH3CO3 + NO2_ + NO2_X                                  ; 8.1e-12, 270
+          CH3CO3 + NO2_ + M -> PAN_ + CH3CO3 + M                         ; 8.5e-29,6.5, 1.1e-11,1., .6
+ [usr_XPAN_M] PAN_ + M -> NO2_ + M
+          C3H7O2 + NO_ -> C3H7O2 + NO2_ + NO2_X                                 ; 4.2e-12, 180
+          RO2 + NO_ -> RO2 + NO2_ + NO2_X                                       ; 2.9e-12, 300
+          ENEO2 + NO_ ->  ENEO2 + NO2_ + NO2_X                                   ; 4.2e-12, 180
+          ALKO2 + NO_ -> ALKO2 + .9 * NO2_ + .9 * NO2_X + .1 * ONIT_ + .1 * ONIT_X ; 4.2e-12, 180
+          ONIT_ + OH -> NO2_ + OH                                        ; 6.8e-13
+    	  MEKO2 + NO_  ->  MEKO2 + NO2_ + NO2_X                                  ; 4.2e-12, 180
+          XOH + NO2_   ->  XOH + .7 * NO2_	             	 ; 1.e-11
+          TOLO2 + NO_   -> TOLO2 + .9 * NO2_ + .9 * NO2_X                  	       	 ; 4.2e-12, 180
+          ISOPO2 + NO_ -> ISOPO2 + .92 * NO2_ + .92 * NO2_X +.08 * ONITR_ + .08 * ONITR_X ; 4.4e-12, 180
+          ISOPO2 + NO3_ -> ISOPO2 + NO2_                                 ; 2.4e-12
+          MACRO2 + NO_ -> NO2_ + NO2_X + MACRO2                                  ; 2.7e-12, 360
+          MACRO2 + NO_ -> 0.8 * ONITR_ + 0.8 * ONITR_X + MACRO2                    ; 1.3e-13,360
+          MACRO2 + NO3_ -> NO2_ + MACRO2                                 ; 2.4e-12
+          MCO3 + NO_ -> NO2_ + NO2_X + MCO3                                       ; 5.3e-12, 360
+          MCO3 + NO3_ -> NO2_ + MCO3                                      ; 5.e-12
+ [usr_MCO3_XNO2] MCO3 + NO2_ + M -> MPAN_ + M + MCO3
+ [usr_XMPAN_M] MPAN_ + M -> NO2_ + M
+          C10H16 + NO3_ -> C10H16 + NO2_                       		  ; 1.2e-12, 490
+ 	  TERPO2 + NO_ -> TERPO2 + NO2_ + NO2_X               		          ; 4.2e-12, 180
+          ISOP + NO3_ -> ISOPNO3_  + ISOP                                          ; 3.03e-12,-446
+          ISOPNO3_ + NO -> .794 * ONITR_ + .206 * NO2_ +  NO                       ; 2.7e-12, 360
+          ISOPNO3 + NO_ ->  NO2_ + NO2_X + ISOPNO3                                 ; 2.7e-12, 360
+          ISOPNO3_ + NO3 -> .794 * ONITR_ + .206 * NO2_ + NO3                      ; 2.4e-12
+          ISOPNO3 + NO3_ ->  NO2_ +  ISOPNO3                                ; 2.4e-12  
+          ISOPNO3_ + HO2 -> .206 * NO2_ + .794 * ONITR_ + HO2               ; 8.e-13, 700
+          CH3COCHO + NO3_ -> HNO3_ + CH3COCHO                              ; 1.4e-12, -1860
+          ONITR_ + OH -> OH  + .4 * NO2_                                   ; 4.5e-11
+          ONITR_ + NO3 -> .5 * NO2_ + NO3                                  ; 1.4e-12, -1860
+          ONITR + NO3_ -> .5 * NO2_ + ONITR                                ; 1.4e-12, -1860
+          XO2 + NO_ -> NO2_ + NO2_X + XO2                                          ; 2.7e-12, 360
+          XO2 + NO3_ -> NO2_ + XO2                                         ; 2.4e-12
+          OH + MPAN_ + M  -> .5 * NO3_ + OH + M                            ; 8.e-27,3.5,3.e-11,0.,.5
+          OH + PAN_  -> NO3_ + OH                                          ; 4.e-14
+          DMS + NO3_ -> DMS + HNO3_                                        ; 1.9e-13, 520.

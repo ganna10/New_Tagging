@@ -1,0 +1,5 @@
+* Ox-tagged reactions for use with VOC tagging scheme
+* All reactions must be on a single line
+
+          O_X + OH -> OH + HO2_X                                                 ; 2.2e-11, 120
+          OH + O3_X -> OH + HO2_X                                                ; 1.7e-12, -940

@@ -1,0 +1,1857 @@
+* MOZART-4 mechanism (as in Emmons et al., 2010)
+*   plus: HCN, CH3CN, C2H2, HCOOH, HOCH2OO
+*   for use with photolysis lookup table
+*   Nov 8, 2010: RO2+CH3O2 rate corrected
+*   April 26, 2011: sync 133spc to trop_mozart and JPL06
+*   March 15, 2012: correct HCN+OH and MPAN+OH (add +M)
+*   Oct 25, 2012: add XNOx for surface sources
+*   Feb 13, 2013: Updates to XNOy rate constants
+
+SPECIES
+
+      Solution
+ O3, O, O1D ->  O, N2O, NO, NO2, NO3, HNO3, HO2NO2, N2O5, H2, OH, HO2, H2O2
+ CH4, CO, CH3O2, CH3OOH, CH2O, CH3OH, C2H5OH
+ C2H4, EO -> HOCH2CH2O, EO2 -> HOCH2CH2O2, CH3COOH, GLYALD -> HOCH2CHO
+ C2H6, C2H5O2, C2H5OOH, CH3CHO, CH3CO3, CH3COOOH
+ C3H6, C3H8, C3H7O2, C3H7OOH, PO2 -> C3H6OHO2, POOH -> C3H6OHOOH
+ CH3COCH3, RO2 -> CH3COCH2O2, ROOH -> CH3COCH2OOH
+ BIGENE -> C4H8, ENEO2 -> C4H9O3
+ MEK -> C4H8O, MEKO2 -> C4H7O3, MEKOOH -> C4H8O3
+ BIGALK -> C5H12, ALKO2 -> C5H11O2, ALKOOH -> C5H12O2
+ ISOP -> C5H8, ISOPO2 -> HOCH2COOCH3CHCH2, ISOPOOH -> HOCH2COOHCH3CHCH2
+ MVK -> CH2CHCOCH3, MACR -> CH2CCH3CHO
+ MACRO2 -> CH3COCHO2CH2OH, MACROOH -> CH3COCHOOHCH2OH
+ MCO3 -> CH2CCH3CO3,  HYDRALD -> HOCH2CCH3CHCHO, HYAC -> CH3COCH2OH
+ CH3COCHO, XO2 -> HOCH2COOCH3CHOHCHO, XOOH -> HOCH2COOHCH3CHOHCHO
+ C10H16, TERPO2 -> C10H17O3, TERPOOH -> C10H18O3
+ TOLUENE -> C7H8, CRESOL -> C7H8O, TOLO2 -> C7H9O5, TOLOOH -> C7H10O5
+ XOH -> C7H10O6, BIGALD -> C5H6O2, GLYOXAL -> C2H2O2
+ PAN -> CH3CO3NO2, ONIT -> CH3COCH2ONO2, MPAN -> CH2CCH3CO3NO2
+ ISOPNO3 -> CH2CHCCH3OOCH2ONO2, ONITR -> CH2CCH3CHONO2CH2OH
+ CB1 -> C, CB2 -> C, OC1 -> C, OC2 -> C, SOA -> C12
+ SO2, DMS -> CH3SCH3, SO4, NH3, NH4, NH4NO3
+ SSLT01 -> NaCl, SSLT02 -> NaCl, SSLT03 -> NaCl, SSLT04 -> NaCl
+ DST01 -> AlSiO5, DST02 -> AlSiO5, DST03 -> AlSiO5, DST04 -> AlSiO5
+ Rn, Pb
+ HCN, CH3CN, C2H2, HCOOH, HOCH2OO
+ALKO2_ANT -> C5H11O2
+ALKO2_BMB -> C5H11O2
+ALKOOH_ANT -> C5H12O2
+ALKOOH_BMB -> C5H12O2
+BIGALD_ANT -> C5H6O2
+BIGALD_BMB -> C5H6O2
+BIGALK_ANT -> C5H12
+BIGALK_BMB -> C5H12
+BIGENE_ANT -> C4H8
+BIGENE_BMB -> C4H8
+C10H16_BIO -> C10H16
+C2H2_ANT -> C2H2
+C2H2_BMB -> C2H2
+C2H4_ANT -> C2H4
+C2H4_BIO -> C2H4
+C2H4_BMB -> C2H4
+C2H5O2_ANT -> C2H5O2
+C2H5O2_BIO -> C2H5O2
+C2H5O2_BMB -> C2H5O2
+C2H5O2_INI -> C2H5O2
+C2H5OH_ANT -> C2H5OH
+C2H5OH_BIO -> C2H5OH
+C2H5OH_BMB -> C2H5OH
+C2H5OH_INI -> C2H5OH
+C2H5OOH_ANT -> C2H5OOH
+C2H5OOH_BIO -> C2H5OOH
+C2H5OOH_BMB -> C2H5OOH
+C2H5OOH_INI -> C2H5OOH
+C2H6_ANT -> C2H6
+C2H6_BIO -> C2H6
+C2H6_BMB -> C2H6
+C2H6_INI -> C2H6
+C3H6_ANT -> C3H6
+C3H6_BIO -> C3H6
+C3H6_BMB -> C3H6
+C3H7O2_ANT -> C3H7O2
+C3H7O2_BIO -> C3H7O2
+C3H7O2_BMB -> C3H7O2
+C3H7OOH_ANT -> C3H7OOH
+C3H7OOH_BIO -> C3H7OOH
+C3H7OOH_BMB -> C3H7OOH
+C3H8_ANT -> C3H8
+C3H8_BIO -> C3H8
+C3H8_BMB -> C3H8
+CH2O_ANT -> CH2O
+CH2O_BIO -> CH2O
+CH2O_BMB -> CH2O
+CH2O_CH4 -> CH2O
+CH2O_INI -> CH2O
+CH3CHO_ANT -> CH3CHO
+CH3CHO_BIO -> CH3CHO
+CH3CHO_BMB -> CH3CHO
+CH3CHO_INI -> CH3CHO
+CH3CN_ANT -> CH3CN
+CH3CN_BMB -> CH3CN
+CH3CO3_ANT -> CH3CO3
+CH3CO3_BIO -> CH3CO3
+CH3CO3_BMB -> CH3CO3
+CH3CO3_INI -> CH3CO3
+CH3COCH3_ANT -> CH3COCH3
+CH3COCH3_BIO -> CH3COCH3
+CH3COCH3_BMB -> CH3COCH3
+CH3COCHO_ANT -> CH3COCHO
+CH3COCHO_BIO -> CH3COCHO
+CH3COCHO_BMB -> CH3COCHO
+CH3COOH_ANT -> CH3COOH
+CH3COOH_BIO -> CH3COOH
+CH3COOH_BMB -> CH3COOH
+CH3COOH_INI -> CH3COOH
+CH3COOOH_ANT -> CH3COOOH
+CH3COOOH_BIO -> CH3COOOH
+CH3COOOH_BMB -> CH3COOOH
+CH3COOOH_INI -> CH3COOOH
+CH3O2_ANT -> CH3O2
+CH3O2_BIO -> CH3O2
+CH3O2_BMB -> CH3O2
+CH3O2_CH4 -> CH3O2
+CH3O2_INI -> CH3O2
+CH3OH_ANT -> CH3OH
+CH3OH_BIO -> CH3OH
+CH3OH_BMB -> CH3OH
+CH3OH_CH4 -> CH3OH
+CH3OH_INI -> CH3OH
+CH3OOH_ANT -> CH3OOH
+CH3OOH_BIO -> CH3OOH
+CH3OOH_BMB -> CH3OOH
+CH3OOH_CH4 -> CH3OOH
+CH3OOH_INI -> CH3OOH
+CH4_ANT -> CH4
+CH4_BIO -> CH4
+CH4_BMB -> CH4
+CH4_CH4 -> CH4
+CO_ANT -> CO
+CO_BIO -> CO
+CO_BMB -> CO
+CO_CH4 -> CO
+CO_INI -> CO
+CRESOL_ANT -> C7H8O
+CRESOL_BMB -> C7H8O
+DMS_BIO -> CH3SCH3
+ENEO2_ANT -> C4H9O3
+ENEO2_BMB -> C4H9O3
+EO2_ANT -> HOCH2CH2O2
+EO2_BIO -> HOCH2CH2O2
+EO2_BMB -> HOCH2CH2O2
+EO_ANT -> HOCH2CH2O
+EO_BIO -> HOCH2CH2O
+EO_BMB -> HOCH2CH2O
+GLYALD_ANT -> HOCH2CHO
+GLYALD_BIO -> HOCH2CHO
+GLYALD_BMB -> HOCH2CHO
+GLYOXAL_ANT -> C2H2O2
+GLYOXAL_BIO -> C2H2O2
+GLYOXAL_BMB -> C2H2O2
+H2_ANT -> H2
+H2_BIO -> H2
+H2_BMB -> H2
+H2_CH4 -> H2
+H2_INI -> H2
+HCN_ANT -> HCN
+HCN_BMB -> HCN
+HCOOH_ANT -> HCOOH
+HCOOH_BIO -> HCOOH
+HCOOH_BMB -> HCOOH
+HCOOH_CH4 -> HCOOH
+HCOOH_INI -> HCOOH
+HNO3_X_ANT -> HNO3
+HNO3_X_BIO -> HNO3
+HNO3_X_BMB -> HNO3
+HNO3_X_CH4 -> HNO3
+HNO3_X_INI -> HNO3
+HNO3_X_STR -> HNO3
+HNO3_X_XTR -> HNO3
+HO2NO2_X_ANT -> HO2NO2
+HO2NO2_X_BIO -> HO2NO2
+HO2NO2_X_BMB -> HO2NO2
+HO2NO2_X_CH4 -> HO2NO2
+HO2NO2_X_INI -> HO2NO2
+HO2NO2_X_STR -> HO2NO2
+HO2NO2_X_XTR -> HO2NO2
+HO2_X_ANT -> HO2
+HO2_X_BIO -> HO2
+HO2_X_BMB -> HO2
+HO2_X_CH4 -> HO2
+HO2_X_INI -> HO2
+HO2_X_STR -> HO2
+HO2_X_XTR -> HO2
+HOCH2OO_ANT -> HOCH2OO
+HOCH2OO_BIO -> HOCH2OO
+HOCH2OO_BMB -> HOCH2OO
+HOCH2OO_CH4 -> HOCH2OO
+HOCH2OO_INI -> HOCH2OO
+HYAC_ANT -> CH3COCH2OH
+HYAC_BIO -> CH3COCH2OH
+HYAC_BMB -> CH3COCH2OH
+HYDRALD_BIO -> HOCH2CCH3CHCHO
+ISOPNO3_BIO -> CH2CHCCH3OOCH2ONO2
+ISOPNO3_X_ANT -> CH2CHCCH3OOCH2ONO2
+ISOPNO3_X_BIO -> CH2CHCCH3OOCH2ONO2
+ISOPNO3_X_BMB -> CH2CHCCH3OOCH2ONO2
+ISOPNO3_X_CH4 -> CH2CHCCH3OOCH2ONO2
+ISOPNO3_X_INI -> CH2CHCCH3OOCH2ONO2
+ISOPNO3_X_STR -> CH2CHCCH3OOCH2ONO2
+ISOPNO3_X_XTR -> CH2CHCCH3OOCH2ONO2
+ISOPO2_BIO -> HOCH2COOCH3CHCH2
+ISOPOOH_BIO -> HOCH2COOHCH3CHCH2
+ISOP_BIO -> C5H8
+MACRO2_BIO -> CH3COCHO2CH2OH
+MACROOH_BIO -> CH3COCHOOHCH2OH
+MACR_BIO -> CH2CCH3CHO
+MCO3_BIO -> CH2CCH3CO3
+MEKO2_ANT -> C4H7O3
+MEKO2_BMB -> C4H7O3
+MEKOOH_ANT -> C4H8O3
+MEKOOH_BMB -> C4H8O3
+MEK_ANT -> C4H8O
+MEK_BMB -> C4H8O
+MPAN_BIO -> CH2CCH3CO3NO2
+MPAN_X_ANT -> CH2CCH3CO3NO2
+MPAN_X_BIO -> CH2CCH3CO3NO2
+MPAN_X_BMB -> CH2CCH3CO3NO2
+MPAN_X_CH4 -> CH2CCH3CO3NO2
+MPAN_X_INI -> CH2CCH3CO3NO2
+MPAN_X_STR -> CH2CCH3CO3NO2
+MPAN_X_XTR -> CH2CCH3CO3NO2
+MVK_BIO -> CH2CHCOCH3
+NO2HO2_X_ANT -> HO2NO2
+NO2HO2_X_BIO -> HO2NO2
+NO2HO2_X_BMB -> HO2NO2
+NO2HO2_X_CH4 -> HO2NO2
+NO2HO2_X_INI -> HO2NO2
+NO2HO2_X_STR -> HO2NO2
+NO2HO2_X_XTR -> HO2NO2
+NO2NO3_X_ANT -> N2O5
+NO2NO3_X_BIO -> N2O5
+NO2NO3_X_BMB -> N2O5
+NO2NO3_X_CH4 -> N2O5
+NO2NO3_X_INI -> N2O5
+NO2NO3_X_STR -> N2O5
+NO2NO3_X_XTR -> N2O5
+NO2_X_ANT -> NO2
+NO2_X_BIO -> NO2
+NO2_X_BMB -> NO2
+NO2_X_CH4 -> NO2
+NO2_X_INI -> NO2
+NO2_X_STR -> NO2
+NO2_X_XTR -> NO2
+NO3NO2_X_ANT -> N2O5
+NO3NO2_X_BIO -> N2O5
+NO3NO2_X_BMB -> N2O5
+NO3NO2_X_CH4 -> N2O5
+NO3NO2_X_INI -> N2O5
+NO3NO2_X_STR -> N2O5
+NO3NO2_X_XTR -> N2O5
+NO3_X_ANT -> NO3
+NO3_X_BIO -> NO3
+NO3_X_BMB -> NO3
+NO3_X_CH4 -> NO3
+NO3_X_INI -> NO3
+NO3_X_STR -> NO3
+NO3_X_XTR -> NO3
+O1D_X_ANT -> O
+O1D_X_BIO -> O
+O1D_X_BMB -> O
+O1D_X_CH4 -> O
+O1D_X_INI -> O
+O1D_X_STR -> O
+O1D_X_XTR -> O
+O3_X_ANT -> O3
+O3_X_BIO -> O3
+O3_X_BMB -> O3
+O3_X_CH4 -> O3
+O3_X_INI -> O3
+O3_X_STR -> O3
+O3_X_XTR -> O3
+ONITR_BIO -> CH2CCH3CHONO2CH2OH
+ONITR_X_ANT -> CH2CCH3CHONO2CH2OH
+ONITR_X_BIO -> CH2CCH3CHONO2CH2OH
+ONITR_X_BMB -> CH2CCH3CHONO2CH2OH
+ONITR_X_CH4 -> CH2CCH3CHONO2CH2OH
+ONITR_X_INI -> CH2CCH3CHONO2CH2OH
+ONITR_X_STR -> CH2CCH3CHONO2CH2OH
+ONITR_X_XTR -> CH2CCH3CHONO2CH2OH
+ONIT_ANT -> CH3COCH2ONO2
+ONIT_BIO -> CH3COCH2ONO2
+ONIT_BMB -> CH3COCH2ONO2
+ONIT_X_ANT -> CH3COCH2ONO2
+ONIT_X_BIO -> CH3COCH2ONO2
+ONIT_X_BMB -> CH3COCH2ONO2
+ONIT_X_CH4 -> CH3COCH2ONO2
+ONIT_X_INI -> CH3COCH2ONO2
+ONIT_X_STR -> CH3COCH2ONO2
+ONIT_X_XTR -> CH3COCH2ONO2
+O_X_ANT -> O
+O_X_BIO -> O
+O_X_BMB -> O
+O_X_CH4 -> O
+O_X_INI -> O
+O_X_STR -> O
+O_X_XTR -> O
+PAN_ANT -> CH3CO3NO2
+PAN_BIO -> CH3CO3NO2
+PAN_BMB -> CH3CO3NO2
+PAN_INI -> CH3CO3NO2
+PAN_X_ANT -> CH3CO3NO2
+PAN_X_BIO -> CH3CO3NO2
+PAN_X_BMB -> CH3CO3NO2
+PAN_X_CH4 -> CH3CO3NO2
+PAN_X_INI -> CH3CO3NO2
+PAN_X_STR -> CH3CO3NO2
+PAN_X_XTR -> CH3CO3NO2
+PO2_ANT -> C3H6OHO2
+PO2_BIO -> C3H6OHO2
+PO2_BMB -> C3H6OHO2
+POOH_ANT -> C3H6OHOOH
+POOH_BIO -> C3H6OHOOH
+POOH_BMB -> C3H6OHOOH
+RO2_ANT -> CH3COCH2O2
+RO2_BIO -> CH3COCH2O2
+RO2_BMB -> CH3COCH2O2
+ROOH_ANT -> CH3COCH2OOH
+ROOH_BIO -> CH3COCH2OOH
+ROOH_BMB -> CH3COCH2OOH
+TERPO2_BIO -> C10H17O3
+TERPOOH_BIO -> C10H18O3
+TOLO2_ANT -> C7H9O5
+TOLO2_BMB -> C7H9O5
+TOLOOH_ANT -> C7H10O5
+TOLOOH_BMB -> C7H10O5
+TOLUENE_ANT -> C7H8
+TOLUENE_BMB -> C7H8
+XO2_BIO -> HOCH2COOCH3CHOHCHO
+XOH_ANT -> C7H10O6
+XOH_BMB -> C7H10O6
+XOOH_BIO -> HOCH2COOHCH3CHOHCHO
+      End Solution
+
+      Fixed
+ M, N2, O2, H2O, dummy
+      End Fixed
+
+      Col-int
+ O3 = 0.
+ O2 = 0.
+      End Col-int
+
+End SPECIES
+
+Solution Classes
+      Implicit
+	    All
+      End Implicit
+End Solution Classes
+
+CHEMISTRY
+   Photolysis
+ [jo2->,jo2_b]          O2 + hv -> 2*O
+ [jo1d->,jo3_a]         O3 + hv -> O1D + O2
+ [jo3p->,jo3_b]         O3 + hv -> O + O2
+ [jn2o]                 N2O + hv -> O1D + N2
+ [jno2]                 NO2 + hv -> NO + O
+ [jn2o5->,jn2o5_a]      N2O5 + hv -> NO2 + NO3
+ [jhno3]                HNO3 + hv -> NO2 + OH
+ [jno3_a]               NO3 + hv -> .89*NO2 + .11*NO + .89*O3
+ [jno3_b]               NO3 + hv -> .89*NO2 + .11*NO + .89*O3
+ [jho2no2_a]            HO2NO2 + hv -> .33*OH + .33*NO3 + .66*NO2 + .66*HO2
+ [jho2no2_b]            HO2NO2 + hv -> .33*OH + .33*NO3 + .66*NO2 + .66*HO2
+ [jch3ooh]              CH3OOH + hv -> CH2O + HO2 + OH
+ [jch2o_a]              CH2O + hv -> CO + 2 * HO2
+ [jch2o_b]              CH2O + hv -> CO + H2
+ [jh2o2]                H2O2 + hv -> 2*OH
+ [jch3cho]              CH3CHO + hv -> CH3O2 + CO + HO2       
+ [jpooh->,jch3ooh]      POOH + hv -> CH3CHO + CH2O + HO2 + OH 
+ [jch3co3h->,.28*jh2o2] CH3COOOH + hv -> CH3O2 + OH  + CO2    
+ [jpan]                 PAN + hv -> .6*CH3CO3 + .6*NO2 + .4*CH3O2 + .4*NO3 + .4*CO2
+ [jmpan->,jpan]         MPAN + hv -> MCO3 + NO2
+* tmb added 'hv' to the reactants of the next two reactions
+ [jmacr_a]              MACR + hv -> .67*HO2 + .33*MCO3 + .67*CH2O + .67*CH3CO3 + .33*OH + .67*CO
+ [jmacr_b]              MACR + hv -> .67*HO2 + .33*MCO3 + .67*CH2O + .67*CH3CO3 + .33*OH + .67*CO
+ [jmvk]                 MVK + hv -> .7*C3H6 + .7*CO + .3*CH3O2 + .3*CH3CO3
+ [jc2h5ooh->,jch3ooh]   C2H5OOH + hv -> CH3CHO + HO2 + OH
+ [jc3h7ooh->,jch3ooh]   C3H7OOH + hv -> .82 * CH3COCH3 + OH + HO2
+ [jrooh->,jch3ooh]      ROOH + hv -> CH3CO3 + CH2O + OH
+ [jacet]                CH3COCH3 + hv -> CH3CO3 + CH3O2
+ [jmgly]                CH3COCHO + hv -> CH3CO3 + CO + HO2
+ [jxooh->,jch3ooh]      XOOH + hv -> OH
+ [jonitr->,jch3cho]     ONITR + hv -> HO2 + CO + NO2 + CH2O
+ [jisopooh->,jch3ooh]   ISOPOOH + hv -> .402 * MVK + .288 * MACR + .69 * CH2O + HO2
+ [jhyac]                HYAC + hv -> CH3CO3 + HO2 + CH2O
+ [jglyald]              GLYALD + hv -> 2 * HO2 + CO + CH2O
+ [jmek->,jacet]         MEK + hv    -> CH3CO3 + C2H5O2
+ [jbigald->,.2*jno2]    BIGALD + hv -> .45*CO + .13*GLYOXAL + .56*HO2 + .13*CH3CO3 + .18*CH3COCHO
+ [jglyoxal->,jmgly]     GLYOXAL + hv -> 2*CO + 2*HO2
+ [jalkooh->,jch3ooh]    ALKOOH + hv  -> .4*CH3CHO + .1*CH2O + .25*CH3COCH3 + .9*HO2 + .8*MEK + OH
+ [jmekooh->,jch3ooh]    MEKOOH + hv  -> OH + CH3CO3 + CH3CHO
+ [jtolooh->,jch3ooh]    TOLOOH + hv  -> OH + .45*GLYOXAL + .45*CH3COCHO + .9*BIGALD
+ [jterpooh->,jch3ooh]   TERPOOH + hv  -> OH + .1*CH3COCH3 + HO2 + MVK + MACR
+ [jch3ooh_ANT->,jch3ooh] CH3OOH_ANT + hv -> CH2O_ANT + HO2_X_ANT
+ [jch3ooh_BIO->,jch3ooh] CH3OOH_BIO + hv -> CH2O_BIO + HO2_X_BIO
+ [jch3ooh_BMB->,jch3ooh] CH3OOH_BMB + hv -> CH2O_BMB + HO2_X_BMB
+ [jch3ooh_CH4->,jch3ooh] CH3OOH_CH4 + hv -> CH2O_CH4 + HO2_X_CH4
+ [jch3ooh_INI->,jch3ooh] CH3OOH_INI + hv -> CH2O_INI + HO2_X_INI
+ [jch2o_a_ANT->,jch2o_a] CH2O_ANT + hv -> CO_ANT + 2 * HO2_X_ANT
+ [jch2o_a_BIO->,jch2o_a] CH2O_BIO + hv -> CO_BIO + 2 * HO2_X_BIO
+ [jch2o_a_BMB->,jch2o_a] CH2O_BMB + hv -> CO_BMB + 2 * HO2_X_BMB
+ [jch2o_a_CH4->,jch2o_a] CH2O_CH4 + hv -> CO_CH4 + 2 * HO2_X_CH4
+ [jch2o_a_INI->,jch2o_a] CH2O_INI + hv -> CO_INI + 2 * HO2_X_INI
+ [jch2o_b_ANT->,jch2o_b] CH2O_ANT + hv -> CO_ANT + H2_ANT
+ [jch2o_b_BIO->,jch2o_b] CH2O_BIO + hv -> CO_BIO + H2_BIO
+ [jch2o_b_BMB->,jch2o_b] CH2O_BMB + hv -> CO_BMB + H2_BMB
+ [jch2o_b_CH4->,jch2o_b] CH2O_CH4 + hv -> CO_CH4 + H2_CH4
+ [jch2o_b_INI->,jch2o_b] CH2O_INI + hv -> CO_INI + H2_INI
+ [jch3cho_ANT->,jch3cho] CH3CHO_ANT + hv -> CH3O2_ANT + CO_ANT + HO2_X_ANT
+ [jch3cho_BIO->,jch3cho] CH3CHO_BIO + hv -> CH3O2_BIO + CO_BIO + HO2_X_BIO
+ [jch3cho_BMB->,jch3cho] CH3CHO_BMB + hv -> CH3O2_BMB + CO_BMB + HO2_X_BMB
+ [jch3cho_INI->,jch3cho] CH3CHO_INI + hv -> CH3O2_INI + CO_INI + HO2_X_INI
+ [jpooh_ANT->,jch3ooh] POOH_ANT + hv -> CH2O_ANT + CH3CHO_ANT + HO2_X_ANT
+ [jpooh_BIO->,jch3ooh] POOH_BIO + hv -> CH2O_BIO + CH3CHO_BIO + HO2_X_BIO
+ [jpooh_BMB->,jch3ooh] POOH_BMB + hv -> CH2O_BMB + CH3CHO_BMB + HO2_X_BMB
+ [jch3co3h_ANT->,.28*jh2o2] CH3COOOH_ANT + hv -> CH3O2_ANT
+ [jch3co3h_BIO->,.28*jh2o2] CH3COOOH_BIO + hv -> CH3O2_BIO
+ [jch3co3h_BMB->,.28*jh2o2] CH3COOOH_BMB + hv -> CH3O2_BMB
+ [jch3co3h_INI->,.28*jh2o2] CH3COOOH_INI + hv -> CH3O2_INI
+ [jpan_ANT->,jpan] PAN_ANT + hv -> .6 * CH3CO3_ANT + .4 * CH3O2_ANT
+ [jpan_BIO->,jpan] PAN_BIO + hv -> .6 * CH3CO3_BIO + .4 * CH3O2_BIO
+ [jpan_BMB->,jpan] PAN_BMB + hv -> .6 * CH3CO3_BMB + .4 * CH3O2_BMB
+ [jpan_INI->,jpan] PAN_INI + hv -> .6 * CH3CO3_INI + .4 * CH3O2_INI
+ [jmpan_BIO->,jpan] MPAN_BIO + hv -> MCO3_BIO
+ [jmacr_a_BIO->,jmacr_a] MACR_BIO + hv -> .67 * CH2O_BIO 
+      + .67 * CH3CO3_BIO + .67 * CO_BIO + .33 * MCO3_BIO + .67 * HO2_X_BIO
+ [jmacr_b_BIO->,jmacr_b] MACR_BIO + hv -> .67 * CH2O_BIO 
+      + .67 * CH3CO3_BIO + .67 * CO_BIO + .33 * MCO3_BIO + .67 * HO2_X_BIO
+ [jmvk_BIO->,jmvk] MVK_BIO + hv -> .7 * C3H6_BIO + .3 * CH3CO3_BIO + .3 * CH3O2_BIO + .7 * CO_BIO
+ [jc2h5ooh_ANT->,jch3ooh] C2H5OOH_ANT + hv -> CH3CHO_ANT + HO2_X_ANT
+ [jc2h5ooh_BIO->,jch3ooh] C2H5OOH_BIO + hv -> CH3CHO_BIO + HO2_X_BIO
+ [jc2h5ooh_BMB->,jch3ooh] C2H5OOH_BMB + hv -> CH3CHO_BMB + HO2_X_BMB
+ [jc2h5ooh_INI->,jch3ooh] C2H5OOH_INI + hv -> CH3CHO_INI + HO2_X_INI
+ [jc3h7ooh_ANT->,jch3ooh] C3H7OOH_ANT + hv -> .82 * CH3COCH3_ANT + HO2_X_ANT
+ [jc3h7ooh_BIO->,jch3ooh] C3H7OOH_BIO + hv -> .82 * CH3COCH3_BIO + HO2_X_BIO
+ [jc3h7ooh_BMB->,jch3ooh] C3H7OOH_BMB + hv -> .82 * CH3COCH3_BMB + HO2_X_BMB
+ [jrooh_ANT->,jch3ooh] ROOH_ANT + hv -> CH2O_ANT + CH3CO3_ANT
+ [jrooh_BIO->,jch3ooh] ROOH_BIO + hv -> CH2O_BIO + CH3CO3_BIO
+ [jrooh_BMB->,jch3ooh] ROOH_BMB + hv -> CH2O_BMB + CH3CO3_BMB
+ [jacet_ANT->,jacet] CH3COCH3_ANT + hv -> CH3CO3_ANT + CH3O2_ANT
+ [jacet_BIO->,jacet] CH3COCH3_BIO + hv -> CH3CO3_BIO + CH3O2_BIO
+ [jacet_BMB->,jacet] CH3COCH3_BMB + hv -> CH3CO3_BMB + CH3O2_BMB
+ [jmgly_ANT->,jmgly] CH3COCHO_ANT + hv -> CH3CO3_ANT + CO_ANT + HO2_X_ANT
+ [jmgly_BIO->,jmgly] CH3COCHO_BIO + hv -> CH3CO3_BIO + CO_BIO + HO2_X_BIO
+ [jmgly_BMB->,jmgly] CH3COCHO_BMB + hv -> CH3CO3_BMB + CO_BMB + HO2_X_BMB
+ [jxooh_BIO->,jch3ooh] XOOH_BIO + hv -> 
+ [jonitr_BIO->,jch3cho] ONITR_BIO + hv -> CH2O_BIO + CO_BIO + HO2_X_BIO
+ [jisopooh_BIO->,jch3ooh] ISOPOOH_BIO + hv -> .69 * CH2O_BIO + .288 * MACR_BIO + .402 * MVK_BIO + HO2_X_BIO
+ [jhyac_ANT->,jhyac] HYAC_ANT + hv -> CH2O_ANT + CH3CO3_ANT + HO2_X_ANT
+ [jhyac_BIO->,jhyac] HYAC_BIO + hv -> CH2O_BIO + CH3CO3_BIO + HO2_X_BIO
+ [jhyac_BMB->,jhyac] HYAC_BMB + hv -> CH2O_BMB + CH3CO3_BMB + HO2_X_BMB
+ [jglyald_ANT->,jglyald] GLYALD_ANT + hv -> CH2O_ANT + CO_ANT + 2 * HO2_X_ANT
+ [jglyald_BIO->,jglyald] GLYALD_BIO + hv -> CH2O_BIO + CO_BIO + 2 * HO2_X_BIO
+ [jglyald_BMB->,jglyald] GLYALD_BMB + hv -> CH2O_BMB + CO_BMB + 2 * HO2_X_BMB
+ [jmek_ANT->,jacet] MEK_ANT + hv -> C2H5O2_ANT + CH3CO3_ANT
+ [jmek_BMB->,jacet] MEK_BMB + hv -> C2H5O2_BMB + CH3CO3_BMB
+ [jbigald_ANT->,.2*jno2] BIGALD_ANT + hv -> .13 * CH3CO3_ANT 
+      + .18 * CH3COCHO_ANT + .45 * CO_ANT + .13 * GLYOXAL_ANT + .56 * HO2_X_ANT
+ [jbigald_BMB->,.2*jno2] BIGALD_BMB + hv -> .13 * CH3CO3_BMB 
+      + .18 * CH3COCHO_BMB + .45 * CO_BMB + .13 * GLYOXAL_BMB + .56 * HO2_X_BMB
+ [jglyoxal_ANT->,jmgly] GLYOXAL_ANT + hv -> 2 * CO_ANT + 2 * HO2_X_ANT
+ [jglyoxal_BIO->,jmgly] GLYOXAL_BIO + hv -> 2 * CO_BIO + 2 * HO2_X_BIO
+ [jglyoxal_BMB->,jmgly] GLYOXAL_BMB + hv -> 2 * CO_BMB + 2 * HO2_X_BMB
+ [jalkooh_ANT->,jch3ooh] ALKOOH_ANT + hv -> .1 * CH2O_ANT 
+      + .4 * CH3CHO_ANT + .25 * CH3COCH3_ANT + .8 * MEK_ANT + .9 * HO2_X_ANT
+ [jalkooh_BMB->,jch3ooh] ALKOOH_BMB + hv -> .1 * CH2O_BMB 
+      + .4 * CH3CHO_BMB + .25 * CH3COCH3_BMB + .8 * MEK_BMB + .9 * HO2_X_BMB
+ [jmekooh_ANT->,jch3ooh] MEKOOH_ANT + hv -> CH3CHO_ANT + CH3CO3_ANT
+ [jmekooh_BMB->,jch3ooh] MEKOOH_BMB + hv -> CH3CHO_BMB + CH3CO3_BMB
+ [jtolooh_ANT->,jch3ooh] TOLOOH_ANT + hv -> .9 * BIGALD_ANT + .45 * CH3COCHO_ANT + .45 * GLYOXAL_ANT
+ [jtolooh_BMB->,jch3ooh] TOLOOH_BMB + hv -> .9 * BIGALD_BMB + .45 * CH3COCHO_BMB + .45 * GLYOXAL_BMB
+ [jterpooh_BIO->,jch3ooh] TERPOOH_BIO + hv -> .1 * CH3COCH3_BIO + MACR_BIO + MVK_BIO + HO2_X_BIO
+ [jo1da_X_STR->,jo3_a] O3_X_STR + hv -> O1D_X_STR 
+ [jo1da_X_INI->,jo3_a] O3_X_INI + hv -> O1D_X_INI 
+ [jo1da_X_CH4->,jo3_a] O3_X_CH4 + hv -> O1D_X_CH4 
+ [jo1da_X_XTR->,jo3_a] O3_X_XTR + hv -> O1D_X_XTR 
+ [jo1da_X_ANT->,jo3_a] O3_X_ANT + hv -> O1D_X_ANT 
+ [jo1da_X_BMB->,jo3_a] O3_X_BMB + hv -> O1D_X_BMB 
+ [jo1da_X_BIO->,jo3_a] O3_X_BIO + hv -> O1D_X_BIO 
+ [jo3pa_X_STR->,jo3_b] O3_X_STR + hv -> O_X_STR 
+ [jo3pa_X_INI->,jo3_b] O3_X_INI + hv -> O_X_INI 
+ [jo3pa_X_CH4->,jo3_b] O3_X_CH4 + hv -> O_X_CH4 
+ [jo3pa_X_XTR->,jo3_b] O3_X_XTR + hv -> O_X_XTR 
+ [jo3pa_X_ANT->,jo3_b] O3_X_ANT + hv -> O_X_ANT 
+ [jo3pa_X_BMB->,jo3_b] O3_X_BMB + hv -> O_X_BMB 
+ [jo3pa_X_BIO->,jo3_b] O3_X_BIO + hv -> O_X_BIO 
+ [jno2a_X_STR->,jno2] NO2_X_STR + hv -> O_X_STR 
+ [jno2a_X_INI->,jno2] NO2_X_INI + hv -> O_X_INI 
+ [jno2a_X_CH4->,jno2] NO2_X_CH4 + hv -> O_X_CH4 
+ [jno2a_X_XTR->,jno2] NO2_X_XTR + hv -> O_X_XTR 
+ [jno2a_X_ANT->,jno2] NO2_X_ANT + hv -> O_X_ANT 
+ [jno2a_X_BMB->,jno2] NO2_X_BMB + hv -> O_X_BMB 
+ [jno2a_X_BIO->,jno2] NO2_X_BIO + hv -> O_X_BIO 
+ [jn2o5a_X_STR->,jn2o5_a] NO3NO2_X_STR + hv -> NO2_X_STR 
+ [jn2o5a_X_INI->,jn2o5_a] NO3NO2_X_INI + hv -> NO2_X_INI 
+ [jn2o5a_X_CH4->,jn2o5_a] NO3NO2_X_CH4 + hv -> NO2_X_CH4 
+ [jn2o5a_X_XTR->,jn2o5_a] NO3NO2_X_XTR + hv -> NO2_X_XTR 
+ [jn2o5a_X_ANT->,jn2o5_a] NO3NO2_X_ANT + hv -> NO2_X_ANT 
+ [jn2o5a_X_BMB->,jn2o5_a] NO3NO2_X_BMB + hv -> NO2_X_BMB 
+ [jn2o5a_X_BIO->,jn2o5_a] NO3NO2_X_BIO + hv -> NO2_X_BIO 
+ [jn2o5b_X_STR->,jn2o5_a] NO2NO3_X_STR + hv -> NO3_X_STR 
+ [jn2o5b_X_INI->,jn2o5_a] NO2NO3_X_INI + hv -> NO3_X_INI 
+ [jn2o5b_X_CH4->,jn2o5_a] NO2NO3_X_CH4 + hv -> NO3_X_CH4 
+ [jn2o5b_X_XTR->,jn2o5_a] NO2NO3_X_XTR + hv -> NO3_X_XTR 
+ [jn2o5b_X_ANT->,jn2o5_a] NO2NO3_X_ANT + hv -> NO3_X_ANT 
+ [jn2o5b_X_BMB->,jn2o5_a] NO2NO3_X_BMB + hv -> NO3_X_BMB 
+ [jn2o5b_X_BIO->,jn2o5_a] NO2NO3_X_BIO + hv -> NO3_X_BIO 
+ [jhno3a_X_STR->,jhno3] HNO3_X_STR + hv -> NO2_X_STR 
+ [jhno3a_X_INI->,jhno3] HNO3_X_INI + hv -> NO2_X_INI 
+ [jhno3a_X_CH4->,jhno3] HNO3_X_CH4 + hv -> NO2_X_CH4 
+ [jhno3a_X_XTR->,jhno3] HNO3_X_XTR + hv -> NO2_X_XTR 
+ [jhno3a_X_ANT->,jhno3] HNO3_X_ANT + hv -> NO2_X_ANT 
+ [jhno3a_X_BMB->,jhno3] HNO3_X_BMB + hv -> NO2_X_BMB 
+ [jhno3a_X_BIO->,jhno3] HNO3_X_BIO + hv -> NO2_X_BIO 
+ [jno3aa_X_STR->,jno3_a] NO3_X_STR + hv -> .89 * NO2_X_STR + .89 * O3_X_STR 
+ [jno3aa_X_INI->,jno3_a] NO3_X_INI + hv -> .89 * NO2_X_INI + .89 * O3_X_INI 
+ [jno3aa_X_CH4->,jno3_a] NO3_X_CH4 + hv -> .89 * NO2_X_CH4 + .89 * O3_X_CH4 
+ [jno3aa_X_XTR->,jno3_a] NO3_X_XTR + hv -> .89 * NO2_X_XTR + .89 * O3_X_XTR 
+ [jno3aa_X_ANT->,jno3_a] NO3_X_ANT + hv -> .89 * NO2_X_ANT + .89 * O3_X_ANT 
+ [jno3aa_X_BMB->,jno3_a] NO3_X_BMB + hv -> .89 * NO2_X_BMB + .89 * O3_X_BMB 
+ [jno3aa_X_BIO->,jno3_a] NO3_X_BIO + hv -> .89 * NO2_X_BIO + .89 * O3_X_BIO 
+ [jno3ab_X_STR->,jno3_b] NO3_X_STR + hv -> .89 * NO2_X_STR + .89 * O3_X_STR 
+ [jno3ab_X_INI->,jno3_b] NO3_X_INI + hv -> .89 * NO2_X_INI + .89 * O3_X_INI 
+ [jno3ab_X_CH4->,jno3_b] NO3_X_CH4 + hv -> .89 * NO2_X_CH4 + .89 * O3_X_CH4 
+ [jno3ab_X_XTR->,jno3_b] NO3_X_XTR + hv -> .89 * NO2_X_XTR + .89 * O3_X_XTR 
+ [jno3ab_X_ANT->,jno3_b] NO3_X_ANT + hv -> .89 * NO2_X_ANT + .89 * O3_X_ANT 
+ [jno3ab_X_BMB->,jno3_b] NO3_X_BMB + hv -> .89 * NO2_X_BMB + .89 * O3_X_BMB 
+ [jno3ab_X_BIO->,jno3_b] NO3_X_BIO + hv -> .89 * NO2_X_BIO + .89 * O3_X_BIO 
+ [jpana_X_STR->,jpan] PAN_X_STR + hv -> .6 * NO2_X_STR + .4 * NO3_X_STR 
+ [jpana_X_INI->,jpan] PAN_X_INI + hv -> .6 * NO2_X_INI + .4 * NO3_X_INI 
+ [jpana_X_CH4->,jpan] PAN_X_CH4 + hv -> .6 * NO2_X_CH4 + .4 * NO3_X_CH4 
+ [jpana_X_XTR->,jpan] PAN_X_XTR + hv -> .6 * NO2_X_XTR + .4 * NO3_X_XTR 
+ [jpana_X_ANT->,jpan] PAN_X_ANT + hv -> .6 * NO2_X_ANT + .4 * NO3_X_ANT 
+ [jpana_X_BMB->,jpan] PAN_X_BMB + hv -> .6 * NO2_X_BMB + .4 * NO3_X_BMB 
+ [jpana_X_BIO->,jpan] PAN_X_BIO + hv -> .6 * NO2_X_BIO + .4 * NO3_X_BIO 
+ [jmpana_X_STR->,jpan] MPAN_X_STR + hv -> NO2_X_STR 
+ [jmpana_X_INI->,jpan] MPAN_X_INI + hv -> NO2_X_INI 
+ [jmpana_X_CH4->,jpan] MPAN_X_CH4 + hv -> NO2_X_CH4 
+ [jmpana_X_XTR->,jpan] MPAN_X_XTR + hv -> NO2_X_XTR 
+ [jmpana_X_ANT->,jpan] MPAN_X_ANT + hv -> NO2_X_ANT 
+ [jmpana_X_BMB->,jpan] MPAN_X_BMB + hv -> NO2_X_BMB 
+ [jmpana_X_BIO->,jpan] MPAN_X_BIO + hv -> NO2_X_BIO 
+ [jho2no2aa_X_STR->,jho2no2_a] HO2NO2_X_STR + hv -> .33 * NO3_X_STR + .66 * NO2_X_STR 
+ [jho2no2aa_X_INI->,jho2no2_a] HO2NO2_X_INI + hv -> .33 * NO3_X_INI + .66 * NO2_X_INI 
+ [jho2no2aa_X_CH4->,jho2no2_a] HO2NO2_X_CH4 + hv -> .33 * NO3_X_CH4 + .66 * NO2_X_CH4 
+ [jho2no2aa_X_XTR->,jho2no2_a] HO2NO2_X_XTR + hv -> .33 * NO3_X_XTR + .66 * NO2_X_XTR 
+ [jho2no2aa_X_ANT->,jho2no2_a] HO2NO2_X_ANT + hv -> .33 * NO3_X_ANT + .66 * NO2_X_ANT 
+ [jho2no2aa_X_BMB->,jho2no2_a] HO2NO2_X_BMB + hv -> .33 * NO3_X_BMB + .66 * NO2_X_BMB 
+ [jho2no2aa_X_BIO->,jho2no2_a] HO2NO2_X_BIO + hv -> .33 * NO3_X_BIO + .66 * NO2_X_BIO 
+ [jho2no2ab_X_STR->,jho2no2_b] HO2NO2_X_STR + hv -> .33 * NO3_X_STR + .66 * NO2_X_STR 
+ [jho2no2ab_X_INI->,jho2no2_b] HO2NO2_X_INI + hv -> .33 * NO3_X_INI + .66 * NO2_X_INI 
+ [jho2no2ab_X_CH4->,jho2no2_b] HO2NO2_X_CH4 + hv -> .33 * NO3_X_CH4 + .66 * NO2_X_CH4 
+ [jho2no2ab_X_XTR->,jho2no2_b] HO2NO2_X_XTR + hv -> .33 * NO3_X_XTR + .66 * NO2_X_XTR 
+ [jho2no2ab_X_ANT->,jho2no2_b] HO2NO2_X_ANT + hv -> .33 * NO3_X_ANT + .66 * NO2_X_ANT 
+ [jho2no2ab_X_BMB->,jho2no2_b] HO2NO2_X_BMB + hv -> .33 * NO3_X_BMB + .66 * NO2_X_BMB 
+ [jho2no2ab_X_BIO->,jho2no2_b] HO2NO2_X_BIO + hv -> .33 * NO3_X_BIO + .66 * NO2_X_BIO 
+ [jonitra_X_STR->,jch3cho] ONITR_X_STR + hv -> NO2_X_STR 
+ [jonitra_X_INI->,jch3cho] ONITR_X_INI + hv -> NO2_X_INI 
+ [jonitra_X_CH4->,jch3cho] ONITR_X_CH4 + hv -> NO2_X_CH4 
+ [jonitra_X_XTR->,jch3cho] ONITR_X_XTR + hv -> NO2_X_XTR 
+ [jonitra_X_ANT->,jch3cho] ONITR_X_ANT + hv -> NO2_X_ANT 
+ [jonitra_X_BMB->,jch3cho] ONITR_X_BMB + hv -> NO2_X_BMB 
+ [jonitra_X_BIO->,jch3cho] ONITR_X_BIO + hv -> NO2_X_BIO 
+ [jno2ho2_a_X_STR->,jho2no2_a] NO2HO2_X_STR + hv -> .66 * HO2_X_STR 
+ [jno2ho2_a_X_INI->,jho2no2_a] NO2HO2_X_INI + hv -> .66 * HO2_X_INI 
+ [jno2ho2_a_X_CH4->,jho2no2_a] NO2HO2_X_CH4 + hv -> .66 * HO2_X_CH4 
+ [jno2ho2_a_X_XTR->,jho2no2_a] NO2HO2_X_XTR + hv -> .66 * HO2_X_XTR 
+ [jno2ho2_a_X_ANT->,jho2no2_a] NO2HO2_X_ANT + hv -> .66 * HO2_X_ANT 
+ [jno2ho2_a_X_BMB->,jho2no2_a] NO2HO2_X_BMB + hv -> .66 * HO2_X_BMB 
+ [jno2ho2_a_X_BIO->,jho2no2_a] NO2HO2_X_BIO + hv -> .66 * HO2_X_BIO 
+ [jno2ho2_b_X_STR->,jho2no2_b] NO2HO2_X_STR + hv -> .66 * HO2_X_STR 
+ [jno2ho2_b_X_INI->,jho2no2_b] NO2HO2_X_INI + hv -> .66 * HO2_X_INI 
+ [jno2ho2_b_X_CH4->,jho2no2_b] NO2HO2_X_CH4 + hv -> .66 * HO2_X_CH4 
+ [jno2ho2_b_X_XTR->,jho2no2_b] NO2HO2_X_XTR + hv -> .66 * HO2_X_XTR 
+ [jno2ho2_b_X_ANT->,jho2no2_b] NO2HO2_X_ANT + hv -> .66 * HO2_X_ANT 
+ [jno2ho2_b_X_BMB->,jho2no2_b] NO2HO2_X_BMB + hv -> .66 * HO2_X_BMB 
+ [jno2ho2_b_X_BIO->,jho2no2_b] NO2HO2_X_BIO + hv -> .66 * HO2_X_BIO 
+ [jo2_X_STR->,jo2_b] O2 + hv -> 2 * O_X_STR + O2
+
+ [jn2o_X_STR->,jn2o] N2O + hv -> O1D_X_STR + N2O
+
+   End Photolysis
+
+   Reactions
+ [usr_O_O2]   O + O2 + M -> O3 + M
+          O + O3 -> 2*O2                                                 ; 8e-12, -2060
+ [o1d_n2] O1D + N2 -> O + N2                                             ; 2.1e-11, 115
+ [o1d_o2] O1D + O2 -> O + O2                                             ; 3.2e-11, 70
+ [ox_l1]  O1D + H2O -> 2*OH                                              ; 2.2e-10
+          H2 + O1D -> HO2 + OH                                           ; 1.1e-10
+          H2 + OH -> H2O + HO2                                           ; 2.8e-12, -1800
+          O + OH -> HO2 + O2                                             ; 2.2e-11, 120
+          HO2 + O -> OH + O2                                             ; 3e-11, 200
+ [ox_l2]  OH + O3 -> HO2 + O2                                            ; 1.7e-12, -940
+ [ox_l3]  HO2 + O3 -> OH + 2*O2                                          ; 1.e-14, -490
+ [usr_HO2_HO2]   HO2 + HO2 -> H2O2 + O2
+          H2O2 + OH -> H2O + HO2                                         ; 2.9e-12, -160
+          OH + HO2 -> H2O + O2                                           ; 4.8e-11, 250
+          OH + OH -> H2O + O                                             ; 1.8e-12
+          OH + OH + M -> H2O2 + M                                        ; 6.9e-31,1., 2.6e-11,0., .6
+          N2O + O1D -> N2 + O2                                           ; 4.9e-11
+          N2O + O1D -> 2*NO                                              ; 6.7e-11
+ [ox_p1]  NO + HO2 -> NO2 + OH                                           ; 3.5e-12, 250
+          NO + O3 -> NO2 + O2                                            ; 3e-12, -1500
+          NO2 + O -> NO + O2                                             ; 5.1e-12, 210
+          NO2 + O3 -> NO3 + O2                                           ; 1.2e-13, -2450
+          NO3 + HO2 -> OH + NO2                                          ; 3.5e-12
+ [tag_NO2_NO3] NO2 + NO3 + M -> N2O5 + M                                ; 2.e-30,4.4, 1.4e-12,.7, .6
+ [usr_N2O5_M] N2O5 + M -> NO2 + NO3 + M
+ [tag_NO2_OH] NO2 + OH + M -> HNO3 + M                                   ; 1.80e-30, 3.0, 2.8e-11, 0.0, 0.6
+ [usr_HNO3_OH] HNO3 + OH -> NO3 + H2O
+          NO3 + NO -> 2*NO2                                              ; 1.5e-11, 170
+ [tag_NO2_HO2]   NO2 + HO2 + M -> HO2NO2 + M                             ; 2.0e-31,3.4, 2.9e-12,1.1, .6
+          HO2NO2 + OH -> H2O + NO2 + O2                                  ; 1.3e-12, 380
+ [usr_HO2NO2_M]   HO2NO2 + M -> HO2 + NO2 + M
+          CH4 + OH -> CH3O2 + H2O                                        ; 2.45e-12, -1775
+          CH4 + O1D -> .75*CH3O2 + .75*OH + .25*CH2O + .4*HO2 + .05*H2   ; 1.5e-10
+ [ox_p2]  CH3O2 + NO -> CH2O + NO2 + HO2                                 ; 2.8e-12, 300
+* tmb: RO2 permutation reaction
+*          CH3O2 + CH3O2 -> 2 * CH2O + 2 * HO2                            ; 5.e-13,-424
+*          CH3O2 + CH3O2 -> CH2O + CH3OH                                  ; 1.9e-14,706
+ [usr_RO2_CH3O2] CH3O2 + M -> M + .7 * CH2O + .3 * CH3OH + .4 * HO2              
+          CH3O2 + HO2 -> CH3OOH + O2                                     ; 4.1e-13, 750
+          CH3OOH + OH -> .7 * CH3O2 + .3 * OH + .3 * CH2O + H2O          ; 3.8e-12, 200
+          CH2O + NO3 -> CO + HO2 + HNO3                                  ; 6.0e-13, -2058
+          CH2O + OH -> CO + H2O +HO2                                     ; 9.e-12
+          CO + OH + M -> CO2 + HO2 + M                                   ; 5.90e-33, 1.4,  1.10e-12, -1.3, 0.6
+ [usr_CO_OH_b] CO + OH -> CO2 + HO2         
+          CH3OH + OH -> HO2 + CH2O                                       ; 7.3e-12,-620
+          HCOOH + OH -> HO2 + CO2 + H2O                                  ; 4.5e-13
+          CH2O + HO2 -> HOCH2OO                                          ; 9.7e-15, 625
+          HOCH2OO -> CH2O + HO2                                          ; 2.4e12, -7000
+          HOCH2OO + NO -> HCOOH + NO2 + HO2                              ; 2.6e-12, 265
+          HOCH2OO + HO2 -> HCOOH                                         ; 7.5e-13, 700
+*C2
+          C2H2 + OH + M -> .65*GLYOXAL + .65*OH + .35*HCOOH + .35*HO2    ; 5.5e-30,0,8.3e-13,-2,.6
+                             + .35*CO + M 
+ [tag_C2H4_OH]  C2H4 + OH + M -> .75*EO2 + .5*CH2O + .25*HO2 + M         ; 1.e-28,.8, 8.8e-12,0., .6
+ [ox_l6]  C2H4 + O3 -> CH2O + .12*HO2 + .5*CO + .12*OH + .5*HCOOH        ; 1.2e-14, -2630
+ [ox_p16] EO2 + NO -> EO + NO2                                           ; 4.2e-12,180
+	  EO  + O2 -> GLYALD + HO2                                       ; 1.e-14
+	  EO       -> 2 * CH2O + HO2                                     ; 1.6e11,-4150
+          C2H6 + OH -> C2H5O2 + H2O                                      ; 8.7e-12, -1070
+ [ox_p5]  C2H5O2 + NO -> CH3CHO + HO2 + NO2                              ; 2.6e-12, 365
+          C2H5O2 + HO2 -> C2H5OOH + O2                                   ; 7.5e-13, 700
+* tmb: RO2 permutation reactions
+*          C2H5O2 + CH3O2 -> .7 * CH2O + .8 * CH3CHO + HO2                ; 2.e-13
+*	                   + .3 * CH3OH + .2 * C2H5OH
+*          C2H5O2 + C2H5O2 -> 1.6 * CH3CHO + 1.2 * HO2 + .4 * C2H5OH      ; 6.8e-14
+ [usr_RO2_C2H5O2] C2H5O2 + M -> M + .8 * CH3CHO + .2 * C2H5OH + .6 * HO2         
+          C2H5OOH + OH -> .5 * C2H5O2 + .5 * CH3CHO + .5 * OH            ; 3.8e-12, 200
+          CH3CHO + OH -> CH3CO3 + H2O                                    ; 5.6e-12, 270
+          CH3CHO + NO3 -> CH3CO3 + HNO3                                  ; 1.4e-12, -1900
+ [ox_p4]  CH3CO3 + NO -> CH3O2 + CO2 + NO2                               ; 8.1e-12, 270
+ [tag_CH3CO3_NO2]  CH3CO3 + NO2 + M -> PAN + M                           ; 8.5e-29,6.5, 1.1e-11,1., .6
+          CH3CO3 + HO2 -> .75*CH3COOOH + .25*CH3COOH + .25*O3            ; 4.3e-13, 1040
+* tmb: RO2 permutation reaction
+*          CH3CO3 + CH3O2 -> .9*CH3O2 + CH2O + .9*HO2 + .9*CO2 + .1*CH3COOH        ; 2.0e-12,500
+*         CH3CO3 + CH3CO3 -> 2*CH3O2 + 2*CO2                             ; 2.5e-12, 500
+ [usr_RO2_CH3CO3] CH3CO3 + M -> M + .9 * CH3O2 + .3 * CH2O + .5 * HO2 + .9 * CO2 + .1 * CH3COOH
+          CH3COOOH + OH -> .5*CH3CO3 + .5*CH2O + .5*CO2 + H2O            ; 1e-12
+          PAN + OH  -> CH2O + NO3 + CO2                                    ; 4.e-14
+ [usr_PAN_M]  PAN + M -> CH3CO3 + NO2 + M
+          GLYALD + OH -> HO2 + .2*GLYOXAL + .8*CH2O + .8*CO2               ; 1.e-11
+ 	  GLYOXAL + OH -> HO2 + CO + CO2                                 ; 1.1e-11
+          CH3COOH + OH -> CH3O2 + CO2 + H2O                               ; 7.e-13
+          C2H5OH + OH -> HO2 + CH3CHO                                      ; 6.9e-12,-230
+
+*C3
+ [tag_C3H6_OH]  C3H6 + OH + M -> PO2 + M                                 ; 8.e-27,3.5, 3.e-11,0, .5
+ [ox_l4]  C3H6 + O3 -> .54*CH2O + .19*HO2 + .33*OH                       ; 6.5e-15, -1900
+                      + .08*CH4 + .56*CO + .5*CH3CHO + .31*CH3O2 + .25*CH3COOH
+          C3H6 + NO3 -> ONIT                                             ; 4.6e-13,-1156
+ [ox_p3]  PO2 + NO -> CH3CHO + CH2O + HO2 + NO2                          ; 4.2e-12, 180
+          PO2 + HO2 -> POOH + O2                                         ; 7.5e-13, 700
+          POOH + OH -> .5*PO2  + .5*OH + .5*HYAC + H2O                   ; 3.8e-12, 200
+          C3H8 + OH -> C3H7O2 + H2O                                      ; 1.0e-11, -665
+ [ox_p9]  C3H7O2 + NO -> .82 * CH3COCH3 + NO2 + HO2 + .27 * CH3CHO       ; 4.2e-12, 180
+          C3H7O2 + HO2 -> C3H7OOH + O2                                   ; 7.5e-13, 700
+* tmb: RO2 permutation reaction
+*          C3H7O2 + CH3O2 -> CH2O + HO2 + .82 * CH3COCH3                  ; 3.75e-13, -40
+ [usr_RO2_C3H7O2] C3H7O2 + M -> M + .3 * CH2O + .6 * HO2 + .82 * CH3COCH3        
+          C3H7OOH + OH -> H2O + C3H7O2                                   ; 3.8e-12, 200
+ [usr_CH3COCH3_OH]  CH3COCH3 + OH -> RO2 + H2O
+ [ox_p10] RO2 + NO -> CH3CO3 + CH2O + NO2                                ; 2.9e-12, 300
+          RO2 + HO2 -> ROOH + O2                                         ; 8.6e-13, 700
+* tmb: RO2 permutation reaction
+*          RO2 + CH3O2 -> .3*CH3CO3 + .8*CH2O + .3*HO2 + .2*HYAC          ; 7.1e-13, 500
+*                      + .5*CH3COCHO + .5*CH3OH
+ [usr_RO2_RO2] RO2 + M -> M + .3 * CH3CO3 + .2 * HYAC + .5 * CH3COCHO + .2 * CH3OH + .1 * CH2O 
+          ROOH + OH -> RO2 + H2O                                         ; 3.8e-12, 200
+          ONIT + OH -> NO2 + CH3COCHO                                    ; 6.8e-13
+          CH3COCHO + OH -> CH3CO3 + CO + H2O                               ; 8.4e-13,830
+          CH3COCHO + NO3 -> HNO3 + CO + CH3CO3                             ; 1.4e-12, -1860
+          HYAC + OH -> CH3COCHO + HO2                                      ; 3.e-12
+
+*C4
+          BIGENE + OH -> ENEO2                                           ; 5.4e-11
+ [ox_p15] ENEO2 + NO -> CH3CHO + .5*CH2O + .5*CH3COCH3 + HO2 + NO2       ; 4.2e-12, 180
+ 	  MEK + OH -> MEKO2                                              ; 2.3e-12, -170
+ [ox_p17] MEKO2 + NO  -> CH3CO3 + CH3CHO + NO2                           ; 4.2e-12, 180
+ 	  MEKO2 + HO2 -> MEKOOH                                          ; 7.5e-13, 700
+ 	  MEKOOH + OH -> MEKO2                                           ; 3.8e-12, 200
+          MPAN + OH + M  -> .5*HYAC + .5*NO3 + .5*CH2O + .5*HO2    ; 8.e-27,3.5,3.e-11,0.,.5
+                            + .5*CO2 + M  
+
+*C5
+ [soa5]   BIGALK + OH -> ALKO2                                           ; 3.5e-12
+ [ox_p14] ALKO2 + NO -> .4*CH3CHO + .1*CH2O + .25*CH3COCH3 + .9*HO2      ; 4.2e-12, 180
+ 		                 + .75*MEK + .9*NO2 + .1*ONIT
+ 	  ALKO2 + HO2 -> ALKOOH                                          ; 7.5e-13, 700
+ 	  ALKOOH + OH -> ALKO2                                           ; 3.8e-12, 200
+          ISOP + OH -> ISOPO2                                            ; 2.54e-11, 410
+ [ox_l5]  ISOP + O3 -> .4 * MACR + .2 * MVK + .07 * C3H6 + .27 * OH      ; 1.05e-14, -2000
+                      + .06 * HO2 + .6 * CH2O + .3 * CO + .1 * O3
+		      + .2 * MCO3 + .2 * CH3COOH
+ [ox_p6]  ISOPO2 + NO -> .08 * ONITR + .92 * NO2 + HO2 + .55 * CH2O      ; 4.4e-12, 180
+                        + .23 * MACR + .32 * MVK + .37 * HYDRALD
+          ISOPO2 + NO3 -> HO2 + NO2 + .6 * CH2O + .25 * MACR             ;  2.4e-12
+                         + .35 * MVK + .4 * HYDRALD
+          ISOPO2 + HO2 -> ISOPOOH                                        ; 8.e-13, 700
+          ISOPOOH + OH -> .8 * XO2 + .2 * ISOPO2                         ; 1.52e-11, 200
+* tmb: RO2 permutation reactions
+*          ISOPO2 + CH3O2 -> .25 * CH3OH + HO2 + 1.2 * CH2O               ; 5.e-13,400
+*                           + .19 * MACR + .26 * MVK + .3 * HYDRALD
+*          ISOPO2 + CH3CO3 -> CH3O2 + HO2 + .6 * CH2O + CO2               ; 1.4e-11
+*                            + .25 * MACR + .35 * MVK + .4 * HYDRALD
+ [usr_RO2_ISOPO2] ISOPO2 + M -> M + .19 * MACR + .26 * MVK + .3 * HYDRALD + .6 * HO2 + .5 * CH2O 
+          ISOP + NO3 -> ISOPNO3                                                    ; 3.03e-12,-446
+          ISOPNO3 + NO -> 1.206 * NO2 + .794 * HO2 + .072 * CH2O + .167 * MACR     ; 2.7e-12, 360
+                          + .039 * MVK + .794 * ONITR
+          ISOPNO3 + NO3 -> 1.206 * NO2 + .072 * CH2O + .167 * MACR + .039 * MVK    ; 2.4e-12
+                           + .794 * ONITR + .794 * HO2
+          ISOPNO3 + HO2 -> .206 * NO2 + .794 * HO2 + .008 * CH2O            ; 8.e-13, 700
+                           + .167 * MACR + .039 * MVK + .794 * ONITR
+          MVK + OH -> MACRO2                                             ; 4.13e-12, 452
+ [ox_l7]  MVK + O3 -> .8 * CH2O + .95 * CH3COCHO + .08 * OH + .2 * O3    ; 7.52e-16,-1521
+                     + .06 * HO2 + .05 * CO + .04 * CH3CHO
+          MACR + OH -> .5 * MACRO2 + .5 * H2O + .5 * MCO3                ; 1.86e-11, 175
+ [ox_l8]  MACR + O3 -> .8 * CH3COCHO + .275 * HO2 + .2 * CO + .2 * O3    ; 4.4e-15, -2500
+                      + .7 * CH2O + .215 * OH
+ [ox_p7]  MACRO2 + NO -> NO2 + .47 * HO2 + .25 * CH2O                    ; 2.7e-12, 360
+                        + .25 * CH3COCHO + .53 * CH3CO3 + .53 * GLYALD
+			+ .22 * HYAC + .22 * CO
+          MACRO2 + NO -> 0.8*ONITR                                       ; 1.3e-13,360
+          MACRO2 + NO3 -> NO2 + .47*HO2 + .25*CH2O + .25*CH3COCHO        ; 2.4e-12
+                         + .22*CO + .53*GLYALD + .22*HYAC + .53*CH3CO3
+          MACRO2 + HO2 -> MACROOH                                        ; 8.e-13, 700
+* tmb: RO2 permutation rections
+*          MACRO2 + CH3O2 -> .73*HO2 + .88*CH2O + .11*CO + .24*CH3COCHO   ; 5.e-13,400
+*                           + .26*GLYALD + .26*CH3CO3 + .25*CH3OH + .23*HYAC
+*          MACRO2 + CH3CO3 -> .25*CH3COCHO + CH3O2 + .22*CO + .47*HO2 + CO2     ; 1.4e-11
+*                            + .53*GLYALD + .22*HYAC + .25*CH2O + .53*CH3CO3
+ [usr_RO2_MACRO2] MACRO2 + M -> M + .33 * HO2 + .18 * CH2O + .11 * CO + .24 * CH3COCHO
+                               + .26 * GLYALD + .26 * CH3CO3 + .23 * HYAC 
+          MACROOH + OH -> .5 * MCO3 + .2*MACRO2 + .1*OH + .2*HO2          ; 2.3e-11, 200
+ [ox_p8]  MCO3 + NO -> NO2 + CH2O + CH3CO3 + CO2                          ; 5.3e-12, 360
+          MCO3 + NO3 -> NO2 + CH2O + CH3CO3 + CO2                         ; 5.e-12
+          MCO3 + HO2 -> .25*O3 + .25*CH3COOH + .75*CH3COOOH + .75*O2      ; 4.30e-13, 1040
+* tmb: RO2 permutation reactions
+*          MCO3 + CH3O2 -> 2 * CH2O + HO2 + CO2 + CH3CO3                   ; 2.0e-12,500
+*          MCO3 + CH3CO3 -> 2 * CO2 + CH3O2 + CH2O + CH3CO3                ; 4.6e-12, 530
+*          MCO3 + MCO3 -> 2 * CO2 + 2 * CH2O + 2 * CH3CO3                  ; 2.3e-12, 530
+ [usr_RO2_MCO3] MCO3 + M -> M + CO2 + CH2O + CH3CO3                                
+ [usr_MCO3_NO2] MCO3 + NO2 + M -> MPAN + M       
+ [usr_MPAN_M]   MPAN + M -> MCO3 + NO2 + M
+          ONITR + OH -> HYDRALD + .4*NO2 + HO2                             ; 4.5e-11
+          ONITR + NO3 -> HYDRALD + NO2 + HO2                               ; 1.4e-12, -1860
+	  HYDRALD + OH -> XO2                                              ; 1.86e-11,175
+ [ox_p11] XO2 + NO -> NO2 + HO2 + .5*CO + .25*GLYOXAL                      ; 2.7e-12, 360.
+                      + .25*HYAC + .25*CH3COCHO + .25*GLYALD
+          XO2 + NO3 -> NO2 + HO2 + 0.5*CO + .25*HYAC                       ; 2.40e-12
+                       + 0.25*GLYOXAL + .25*CH3COCHO + .25*GLYALD
+          XO2 + HO2 -> XOOH                                                ; 8.e-13, 700
+* tmb: RO2 permutation reactions
+*          XO2 + CH3O2 -> .3 * CH3OH + 0.8*HO2 + .7 * CH2O                  ; 5.00e-13, 400.
+*	                 + .2 * CO + .1 * HYAC
+*			 + .1*GLYOXAL + .1 * CH3COCHO + .1 * GLYALD
+*          XO2 + CH3CO3 -> 0.5*CO + CH3O2 + HO2 + CO2 + .25 GLYOXAL         ; 1.30e-12, 640.
+*	                  + .25 * HYAC + .25 * CH3COCHO + .25 * GLYALD
+ [usr_RO2_XO2] XO2 + M -> M + .2 * CO + .4 * HO2 + .1 * GLYOXAL + .1 * HYAC + .1 * CH3COCHO + .1 * GLYALD 
+          XOOH + OH -> H2O + XO2                                           ; 1.90e-12, 190
+ [usr_XOOH_OH]  XOOH + OH -> H2O + OH
+
+*C7
+ [soa4]   TOLUENE + OH -> .25*CRESOL + .25*HO2 + .7*TOLO2                  ; 1.7e-12, 352
+ 	  CRESOL + OH  -> XOH                                              ; 3.e-12
+ 	  XOH + NO2    -> .7*NO2 + .7*BIGALD + .7*HO2                      ; 1.e-11
+ [ox_p12] TOLO2 + NO   -> .45*GLYOXAL + .45*CH3COCHO +.9*BIGALD            ; 4.2e-12, 180
+				     + .9*NO2 + .9*HO2
+ 	  TOLO2 + HO2  -> TOLOOH                                           ; 7.5e-13, 700
+ 	  TOLOOH + OH  -> TOLO2                                            ; 3.8e-12, 200
+
+*C10
+ [soa2]   C10H16 + OH -> TERPO2                                            ; 1.2e-11, 444
+ [soa1]   C10H16 + O3 -> .7*OH + MVK + MACR + HO2                          ; 1.e-15, -732
+ [soa3]   C10H16 + NO3 -> TERPO2 + NO2                                     ; 1.2e-12, 490
+ [ox_p13] TERPO2 + NO  -> .1*CH3COCH3 + HO2 + MVK + MACR + NO2             ; 4.2e-12, 180
+ 	  TERPO2 + HO2 -> TERPOOH                                          ; 7.5e-13, 700
+ 	  TERPOOH + OH -> TERPO2                                           ; 3.8e-12, 200
+
+          Rn -> Pb                                                         ; 2.1e-6
+*het/aerosol rxns
+ [usr_N2O5_aer]  N2O5 -> 2 * HNO3
+ [usr_NO3_aer]  NO3  -> HNO3
+ [usr_NO2_aer] NO2  -> 0.5*OH + 0.5*NO + 0.5*HNO3
+          CB1 -> CB2                                                       ; 7.1e-6
+ [usr_SO2_OH]  SO2 + OH -> SO4
+          DMS + OH -> SO2                                                  ; 9.6e-12,-234.
+ [usr_DMS_OH]  DMS + OH -> .5 * SO2 + .5 * HO2
+          DMS + NO3 -> SO2 + HNO3                                          ; 1.9e-13, 520.
+          NH3 + OH -> H2O                                                  ; 1.7e-12, -710.
+          OC1 -> OC2                                                       ; 7.1e-6
+ [usr_HO2_aer]  HO2 -> 0.5*H2O2
+*cyanides
+          HCN + OH + M -> HO2 + M                       ; 4.28e-33, 0.0, 9.30e-15, -4.42, 0.8
+          CH3CN + OH -> HO2                                              ;7.8e-13, -1050
+*xno-o3a have been removed and placed in a separate file...
+ [ox_p4_ANT] CH3CO3_ANT + NO -> NO + CH3O2_ANT + NO2_X_ANT ; 8.1e-12, 270
+ [ox_p4_BIO] CH3CO3_BIO + NO -> NO + CH3O2_BIO + NO2_X_BIO ; 8.1e-12, 270
+ [ox_p4_BMB] CH3CO3_BMB + NO -> NO + CH3O2_BMB + NO2_X_BMB ; 8.1e-12, 270
+ [ox_p4_INI] CH3CO3_INI + NO -> NO + CH3O2_INI + NO2_X_INI ; 8.1e-12, 270
+ [tag_CH3CO3_NO2_ANT] CH3CO3_ANT + M + NO2 -> M + NO2 + PAN_ANT ; 8.5e-29,6.5, 1.1e-11,1., .6
+ [tag_CH3CO3_NO2_BIO] CH3CO3_BIO + M + NO2 -> M + NO2 + PAN_BIO ; 8.5e-29,6.5, 1.1e-11,1., .6
+ [tag_CH3CO3_NO2_BMB] CH3CO3_BMB + M + NO2 -> M + NO2 + PAN_BMB ; 8.5e-29,6.5, 1.1e-11,1., .6
+ [tag_CH3CO3_NO2_INI] CH3CO3_INI + M + NO2 -> M + NO2 + PAN_INI ; 8.5e-29,6.5, 1.1e-11,1., .6
+  CH3CO3_ANT + HO2 -> HO2 + .25 * CH3COOH_ANT + .75 * CH3COOOH_ANT + .25 * O3_X_ANT ; 4.3e-13, 1040
+  CH3CO3_BIO + HO2 -> HO2 + .25 * CH3COOH_BIO + .75 * CH3COOOH_BIO + .25 * O3_X_BIO ; 4.3e-13, 1040
+  CH3CO3_BMB + HO2 -> HO2 + .25 * CH3COOH_BMB + .75 * CH3COOOH_BMB + .25 * O3_X_BMB ; 4.3e-13, 1040
+  CH3CO3_INI + HO2 -> HO2 + .25 * CH3COOH_INI + .75 * CH3COOOH_INI + .25 * O3_X_INI ; 4.3e-13, 1040
+ [usr_RO2_CH3CO3_ANT] CH3CO3_ANT + M -> M + .3 * CH2O_ANT + .1 * CH3COOH_ANT + .9 * CH3O2_ANT + .5 * HO2_X_ANT
+ [usr_RO2_CH3CO3_BIO] CH3CO3_BIO + M -> M + .3 * CH2O_BIO + .1 * CH3COOH_BIO + .9 * CH3O2_BIO + .5 * HO2_X_BIO
+ [usr_RO2_CH3CO3_BMB] CH3CO3_BMB + M -> M + .3 * CH2O_BMB + .1 * CH3COOH_BMB + .9 * CH3O2_BMB + .5 * HO2_X_BMB
+ [usr_RO2_CH3CO3_INI] CH3CO3_INI + M -> M + .3 * CH2O_INI + .1 * CH3COOH_INI + .9 * CH3O2_INI + .5 * HO2_X_INI
+  CH3COOOH_ANT + OH -> OH + .5 * CH2O_ANT + .5 * CH3CO3_ANT ; 1e-12
+  CH3COOOH_BIO + OH -> OH + .5 * CH2O_BIO + .5 * CH3CO3_BIO ; 1e-12
+  CH3COOOH_BMB + OH -> OH + .5 * CH2O_BMB + .5 * CH3CO3_BMB ; 1e-12
+  CH3COOOH_INI + OH -> OH + .5 * CH2O_INI + .5 * CH3CO3_INI ; 1e-12
+  OH + PAN_ANT -> OH + CH2O_ANT ; 4.e-14
+  OH + PAN_BIO -> OH + CH2O_BIO ; 4.e-14
+  OH + PAN_BMB -> OH + CH2O_BMB ; 4.e-14
+  OH + PAN_INI -> OH + CH2O_INI ; 4.e-14
+ [usr_PAN_M_ANT] M + PAN_ANT -> M + CH3CO3_ANT
+ [usr_PAN_M_BIO] M + PAN_BIO -> M + CH3CO3_BIO
+ [usr_PAN_M_BMB] M + PAN_BMB -> M + CH3CO3_BMB
+ [usr_PAN_M_INI] M + PAN_INI -> M + CH3CO3_INI
+  GLYALD_ANT + OH -> OH + .8 * CH2O_ANT + .2 * GLYOXAL_ANT + HO2_X_ANT ; 1.e-11
+  GLYALD_BIO + OH -> OH + .8 * CH2O_BIO + .2 * GLYOXAL_BIO + HO2_X_BIO ; 1.e-11
+  GLYALD_BMB + OH -> OH + .8 * CH2O_BMB + .2 * GLYOXAL_BMB + HO2_X_BMB ; 1.e-11
+  GLYOXAL_ANT + OH -> OH + CO_ANT + HO2_X_ANT ; 1.1e-11
+  GLYOXAL_BIO + OH -> OH + CO_BIO + HO2_X_BIO ; 1.1e-11
+  GLYOXAL_BMB + OH -> OH + CO_BMB + HO2_X_BMB ; 1.1e-11
+  CH3COOH_ANT + OH -> OH + CH3O2_ANT ; 7.e-13
+  CH3COOH_BIO + OH -> OH + CH3O2_BIO ; 7.e-13
+  CH3COOH_BMB + OH -> OH + CH3O2_BMB ; 7.e-13
+  CH3COOH_INI + OH -> OH + CH3O2_INI ; 7.e-13
+  C2H5OH_ANT + OH -> OH + CH3CHO_ANT + HO2_X_ANT ; 6.9e-12,-230
+  C2H5OH_BIO + OH -> OH + CH3CHO_BIO + HO2_X_BIO ; 6.9e-12,-230
+  C2H5OH_BMB + OH -> OH + CH3CHO_BMB + HO2_X_BMB ; 6.9e-12,-230
+  C2H5OH_INI + OH -> OH + CH3CHO_INI + HO2_X_INI ; 6.9e-12,-230
+ [tag_C3H6_OH_ANT] C3H6_ANT + M + OH -> M + OH + PO2_ANT ; 8.e-27,3.5, 3.e-11,0, .5
+ [tag_C3H6_OH_BIO] C3H6_BIO + M + OH -> M + OH + PO2_BIO ; 8.e-27,3.5, 3.e-11,0, .5
+ [tag_C3H6_OH_BMB] C3H6_BMB + M + OH -> M + OH + PO2_BMB ; 8.e-27,3.5, 3.e-11,0, .5
+ [ox_l4_ANT] C3H6_ANT + O3 -> O3 ; 6.5e-15, -1900
+      + .54 * CH2O_ANT + .5 * CH3CHO_ANT + .25 * CH3COOH_ANT + .31 * CH3O2_ANT + .08 * CH4_ANT + .56 * CO_ANT 
+      + .19 * HO2_X_ANT 
+ [ox_l4_BIO] C3H6_BIO + O3 -> O3 ; 6.5e-15, -1900
+      + .54 * CH2O_BIO + .5 * CH3CHO_BIO + .25 * CH3COOH_BIO + .31 * CH3O2_BIO + .08 * CH4_BIO + .56 * CO_BIO 
+      + .19 * HO2_X_BIO 
+ [ox_l4_BMB] C3H6_BMB + O3 -> O3 ; 6.5e-15, -1900
+      + .54 * CH2O_BMB + .5 * CH3CHO_BMB + .25 * CH3COOH_BMB + .31 * CH3O2_BMB + .08 * CH4_BMB + .56 * CO_BMB 
+      + .19 * HO2_X_BMB 
+  C3H6_ANT + NO3 -> NO3 + ONIT_ANT ; 4.6e-13,-1156
+  C3H6_BIO + NO3 -> NO3 + ONIT_BIO ; 4.6e-13,-1156
+  C3H6_BMB + NO3 -> NO3 + ONIT_BMB ; 4.6e-13,-1156
+ [ox_p3_ANT] NO + PO2_ANT -> NO + CH2O_ANT + CH3CHO_ANT + NO2_X_ANT + HO2_X_ANT ; 4.2e-12, 180
+ [ox_p3_BIO] NO + PO2_BIO -> NO + CH2O_BIO + CH3CHO_BIO + NO2_X_BIO + HO2_X_BIO ; 4.2e-12, 180
+ [ox_p3_BMB] NO + PO2_BMB -> NO + CH2O_BMB + CH3CHO_BMB + NO2_X_BMB + HO2_X_BMB ; 4.2e-12, 180
+  HO2 + PO2_ANT -> HO2 + POOH_ANT ; 7.5e-13, 700
+  HO2 + PO2_BIO -> HO2 + POOH_BIO ; 7.5e-13, 700
+  HO2 + PO2_BMB -> HO2 + POOH_BMB ; 7.5e-13, 700
+  OH + POOH_ANT -> OH + .5 * HYAC_ANT + .5 * PO2_ANT ; 3.8e-12, 200
+  OH + POOH_BIO -> OH + .5 * HYAC_BIO + .5 * PO2_BIO ; 3.8e-12, 200
+  OH + POOH_BMB -> OH + .5 * HYAC_BMB + .5 * PO2_BMB ; 3.8e-12, 200
+  C3H8_ANT + OH -> OH + C3H7O2_ANT ; 1.0e-11, -665
+  C3H8_BIO + OH -> OH + C3H7O2_BIO ; 1.0e-11, -665
+  C3H8_BMB + OH -> OH + C3H7O2_BMB ; 1.0e-11, -665
+ [ox_p9_ANT] C3H7O2_ANT + NO -> NO + .27 * CH3CHO_ANT + .82 * CH3COCH3_ANT + NO2_X_ANT + HO2_X_ANT ; 4.2e-12, 180
+ [ox_p9_BIO] C3H7O2_BIO + NO -> NO + .27 * CH3CHO_BIO + .82 * CH3COCH3_BIO + NO2_X_BIO + HO2_X_BIO ; 4.2e-12, 180
+ [ox_p9_BMB] C3H7O2_BMB + NO -> NO + .27 * CH3CHO_BMB + .82 * CH3COCH3_BMB + NO2_X_BMB + HO2_X_BMB ; 4.2e-12, 180
+  C3H7O2_ANT + HO2 -> HO2 + C3H7OOH_ANT ; 7.5e-13, 700
+  C3H7O2_BIO + HO2 -> HO2 + C3H7OOH_BIO ; 7.5e-13, 700
+  C3H7O2_BMB + HO2 -> HO2 + C3H7OOH_BMB ; 7.5e-13, 700
+ [usr_RO2_C3H7O2_ANT] C3H7O2_ANT + M -> M + .3 * CH2O_ANT + .82 * CH3COCH3_ANT + .6 * HO2_X_ANT
+ [usr_RO2_C3H7O2_BIO] C3H7O2_BIO + M -> M + .3 * CH2O_BIO + .82 * CH3COCH3_BIO + .6 * HO2_X_BIO
+ [usr_RO2_C3H7O2_BMB] C3H7O2_BMB + M -> M + .3 * CH2O_BMB + .82 * CH3COCH3_BMB + .6 * HO2_X_BMB
+  C3H7OOH_ANT + OH -> OH + C3H7O2_ANT ; 3.8e-12, 200
+  C3H7OOH_BIO + OH -> OH + C3H7O2_BIO ; 3.8e-12, 200
+  C3H7OOH_BMB + OH -> OH + C3H7O2_BMB ; 3.8e-12, 200
+ [usr_CH3COCH3_OH_ANT] CH3COCH3_ANT + OH -> OH + RO2_ANT
+ [usr_CH3COCH3_OH_BIO] CH3COCH3_BIO + OH -> OH + RO2_BIO
+ [usr_CH3COCH3_OH_BMB] CH3COCH3_BMB + OH -> OH + RO2_BMB
+ [ox_p10_ANT] NO + RO2_ANT -> NO + CH2O_ANT + CH3CO3_ANT + NO2_X_ANT ; 2.9e-12, 300
+ [ox_p10_BIO] NO + RO2_BIO -> NO + CH2O_BIO + CH3CO3_BIO + NO2_X_BIO ; 2.9e-12, 300
+ [ox_p10_BMB] NO + RO2_BMB -> NO + CH2O_BMB + CH3CO3_BMB + NO2_X_BMB ; 2.9e-12, 300
+  HO2 + RO2_ANT -> HO2 + ROOH_ANT ; 8.6e-13, 700
+  HO2 + RO2_BIO -> HO2 + ROOH_BIO ; 8.6e-13, 700
+  HO2 + RO2_BMB -> HO2 + ROOH_BMB ; 8.6e-13, 700
+ [usr_RO2_RO2_ANT] M + RO2_ANT -> M 
+      + .1 * CH2O_ANT + .3 * CH3CO3_ANT + .5 * CH3COCHO_ANT + .2 * CH3OH_ANT + .2 * HYAC_ANT
+ [usr_RO2_RO2_BIO] M + RO2_BIO -> M 
+      + .1 * CH2O_BIO + .3 * CH3CO3_BIO + .5 * CH3COCHO_BIO + .2 * CH3OH_BIO + .2 * HYAC_BIO
+ [usr_RO2_RO2_BMB] M + RO2_BMB -> M 
+      + .1 * CH2O_BMB + .3 * CH3CO3_BMB + .5 * CH3COCHO_BMB + .2 * CH3OH_BMB + .2 * HYAC_BMB
+  OH + ROOH_ANT -> OH + RO2_ANT ; 3.8e-12, 200
+  OH + ROOH_BIO -> OH + RO2_BIO ; 3.8e-12, 200
+  OH + ROOH_BMB -> OH + RO2_BMB ; 3.8e-12, 200
+  OH + ONIT_ANT -> OH + CH3COCHO_ANT ; 6.8e-13
+  OH + ONIT_BIO -> OH + CH3COCHO_BIO ; 6.8e-13
+  OH + ONIT_BMB -> OH + CH3COCHO_BMB ; 6.8e-13
+  CH3COCHO_ANT + OH -> OH + CH3CO3_ANT + CO_ANT ; 8.4e-13,830
+  CH3COCHO_BIO + OH -> OH + CH3CO3_BIO + CO_BIO ; 8.4e-13,830
+  CH3COCHO_BMB + OH -> OH + CH3CO3_BMB + CO_BMB ; 8.4e-13,830
+  CH3COCHO_ANT + NO3 -> NO3 + CH3CO3_ANT + CO_ANT ; 1.4e-12, -1860
+  CH3COCHO_BIO + NO3 -> NO3 + CH3CO3_BIO + CO_BIO ; 1.4e-12, -1860
+  CH3COCHO_BMB + NO3 -> NO3 + CH3CO3_BMB + CO_BMB ; 1.4e-12, -1860
+  HYAC_ANT + OH -> OH + CH3COCHO_ANT + HO2_X_ANT ; 3.e-12
+  HYAC_BIO + OH -> OH + CH3COCHO_BIO + HO2_X_BIO ; 3.e-12
+  HYAC_BMB + OH -> OH + CH3COCHO_BMB + HO2_X_BMB ; 3.e-12
+  BIGENE_ANT + OH -> OH + ENEO2_ANT ; 5.4e-11
+  BIGENE_BMB + OH -> OH + ENEO2_BMB ; 5.4e-11
+ [ox_p15_ANT] ENEO2_ANT + NO -> NO ; 4.2e-12, 180
+      + .5 * CH2O_ANT + CH3CHO_ANT + .5 * CH3COCH3_ANT + NO2_X_ANT + HO2_X_ANT 
+ [ox_p15_BMB] ENEO2_BMB + NO -> NO ; 4.2e-12, 180
+      + .5 * CH2O_BMB + CH3CHO_BMB + .5 * CH3COCH3_BMB + NO2_X_BMB + HO2_X_BMB 
+  MEK_ANT + OH -> OH + MEKO2_ANT ; 2.3e-12, -170
+  MEK_BMB + OH -> OH + MEKO2_BMB ; 2.3e-12, -170
+ [ox_p17_ANT] MEKO2_ANT + NO -> NO + CH3CHO_ANT + CH3CO3_ANT + NO2_X_ANT ; 4.2e-12, 180
+ [ox_p17_BMB] MEKO2_BMB + NO -> NO + CH3CHO_BMB + CH3CO3_BMB + NO2_X_BMB ; 4.2e-12, 180
+  HO2 + MEKO2_ANT -> HO2 + MEKOOH_ANT ; 7.5e-13, 700
+  HO2 + MEKO2_BMB -> HO2 + MEKOOH_BMB ; 7.5e-13, 700
+  MEKOOH_ANT + OH -> OH + MEKO2_ANT ; 3.8e-12, 200
+  MEKOOH_BMB + OH -> OH + MEKO2_BMB ; 3.8e-12, 200
+  M + MPAN_BIO + OH -> M + OH + .5 * CH2O_BIO + .5 * HYAC_BIO + .5 * HO2_X_BIO ; 8.e-27,3.5,3.e-11,0.,.5
+ [soa5_ANT] BIGALK_ANT + OH -> OH + ALKO2_ANT ; 3.5e-12
+ [soa5_BMB] BIGALK_BMB + OH -> OH + ALKO2_BMB ; 3.5e-12
+ [ox_p14_ANT] ALKO2_ANT + NO -> NO ; 4.2e-12, 180
+      + .1 * CH2O_ANT + .4 * CH3CHO_ANT + .25 * CH3COCH3_ANT + .75 * MEK_ANT + .1 * ONIT_ANT + .9 * NO2_X_ANT 
+      + .1 * ONIT_X_ANT + .9 * HO2_X_ANT 
+ [ox_p14_BMB] ALKO2_BMB + NO -> NO ; 4.2e-12, 180
+      + .1 * CH2O_BMB + .4 * CH3CHO_BMB + .25 * CH3COCH3_BMB + .75 * MEK_BMB + .1 * ONIT_BMB + .9 * NO2_X_BMB 
+      + .1 * ONIT_X_BMB + .9 * HO2_X_BMB 
+  ALKO2_ANT + HO2 -> HO2 + ALKOOH_ANT ; 7.5e-13, 700
+  ALKO2_BMB + HO2 -> HO2 + ALKOOH_BMB ; 7.5e-13, 700
+  ALKOOH_ANT + OH -> OH + ALKO2_ANT ; 3.8e-12, 200
+  ALKOOH_BMB + OH -> OH + ALKO2_BMB ; 3.8e-12, 200
+  ISOP_BIO + OH -> OH + ISOPO2_BIO ; 2.54e-11, 410
+ [ox_l5_BIO] ISOP_BIO + O3 -> O3 ; 1.05e-14, -2000
+      + .07 * C3H6_BIO + .6 * CH2O_BIO + .2 * CH3COOH_BIO + .3 * CO_BIO + .4 * MACR_BIO + .2 * MCO3_BIO + .2 * MVK_BIO 
+      + .06 * HO2_X_BIO 
+ [ox_p6_BIO] ISOPO2_BIO + NO -> NO ; 4.4e-12, 180
+      + .55 * CH2O_BIO + .37 * HYDRALD_BIO + .23 * MACR_BIO + .32 * MVK_BIO + .08 * ONITR_BIO + .92 * NO2_X_BIO 
+      + .08 * ONITR_X_BIO + HO2_X_BIO 
+  ISOPO2_BIO + NO3 -> NO3 + .6 * CH2O_BIO + .4 * HYDRALD_BIO + .25 * MACR_BIO + .35 * MVK_BIO + HO2_X_BIO ; 2.4e-12
+  HO2 + ISOPO2_BIO -> HO2 + ISOPOOH_BIO ; 8.e-13, 700
+  ISOPOOH_BIO + OH -> OH + .2 * ISOPO2_BIO + .8 * XO2_BIO ; 1.52e-11, 200
+ [usr_RO2_ISOPO2_BIO] ISOPO2_BIO + M -> M 
+      + .5 * CH2O_BIO + .3 * HYDRALD_BIO + .19 * MACR_BIO + .26 * MVK_BIO + .6 * HO2_X_BIO
+  ISOP_BIO + NO3 -> NO3 + ISOPNO3_BIO ; 3.03e-12,-446
+  ISOPNO3_BIO + NO -> NO ; 2.7e-12, 360
+      + .072 * CH2O_BIO + .167 * MACR_BIO + .039 * MVK_BIO + .794 * ONITR_BIO + NO2_X_BIO + .794 * HO2_X_BIO 
+  ISOPNO3_BIO + NO3 -> NO3 ; 2.4e-12
+      + .072 * CH2O_BIO + .167 * MACR_BIO + .039 * MVK_BIO + .794 * ONITR_BIO + .794 * HO2_X_BIO 
+  HO2 + ISOPNO3_BIO -> HO2 ; 8.e-13, 700
+      + .008 * CH2O_BIO + .167 * MACR_BIO + .039 * MVK_BIO + .794 * ONITR_BIO + .794 * HO2_X_BIO 
+  MVK_BIO + OH -> OH + MACRO2_BIO ; 4.13e-12, 452
+ [ox_l7_BIO] MVK_BIO + O3 -> O3 ; 7.52e-16,-1521
+      + .8 * CH2O_BIO + .04 * CH3CHO_BIO + .95 * CH3COCHO_BIO + .05 * CO_BIO + .06 * HO2_X_BIO 
+  MACR_BIO + OH -> OH + .5 * MACRO2_BIO + .5 * MCO3_BIO ; 1.86e-11, 175
+ [ox_l8_BIO] MACR_BIO + O3 -> O3 + .7 * CH2O_BIO + .8 * CH3COCHO_BIO + .2 * CO_BIO + .275 * HO2_X_BIO ; 4.4e-15, -2500
+ [ox_p7_BIO] MACRO2_BIO + NO -> NO ; 2.7e-12, 360
+      + .25 * CH2O_BIO + .53 * CH3CO3_BIO + .25 * CH3COCHO_BIO + .22 * CO_BIO + .53 * GLYALD_BIO + .22 * HYAC_BIO 
+      + NO2_X_BIO + .47 * HO2_X_BIO 
+  MACRO2_BIO + NO -> NO + 0.8 * ONITR_BIO + 0.8 * ONITR_X_BIO ; 1.3e-13,360
+  MACRO2_BIO + NO3 -> NO3 ; 2.4e-12
+      + .25 * CH2O_BIO + .53 * CH3CO3_BIO + .25 * CH3COCHO_BIO + .22 * CO_BIO + .53 * GLYALD_BIO + .22 * HYAC_BIO 
+      + .47 * HO2_X_BIO 
+  HO2 + MACRO2_BIO -> HO2 + MACROOH_BIO ; 8.e-13, 700
+ [usr_RO2_MACRO2_BIO] M + MACRO2_BIO -> M 
+      + .18 * CH2O_BIO + .26 * CH3CO3_BIO + .24 * CH3COCHO_BIO + .11 * CO_BIO + .26 * GLYALD_BIO + .23 * HYAC_BIO 
+      + .33 * HO2_X_BIO
+  MACROOH_BIO + OH -> OH + .2 * MACRO2_BIO + .5 * MCO3_BIO + .2 * HO2_X_BIO ; 2.3e-11, 200
+ [ox_p8_BIO] MCO3_BIO + NO -> NO + CH2O_BIO + CH3CO3_BIO + NO2_X_BIO ; 5.3e-12, 360
+  MCO3_BIO + NO3 -> NO3 + CH2O_BIO + CH3CO3_BIO ; 5.e-12
+  HO2 + MCO3_BIO -> HO2 + .25 * CH3COOH_BIO + .75 * CH3COOOH_BIO + .25 * O3_X_BIO ; 4.30e-13, 1040
+ [usr_RO2_MCO3_BIO] M + MCO3_BIO -> M + CH2O_BIO + CH3CO3_BIO
+ [usr_MCO3_NO2_BIO] M + MCO3_BIO + NO2 -> M + NO2 + MPAN_BIO
+ [usr_MPAN_M_BIO] M + MPAN_BIO -> M + MCO3_BIO
+  OH + ONITR_BIO -> OH + HYDRALD_BIO + HO2_X_BIO ; 4.5e-11
+  NO3 + ONITR_BIO -> NO3 + HYDRALD_BIO + HO2_X_BIO ; 1.4e-12, -1860
+  HYDRALD_BIO + OH -> OH + XO2_BIO ; 1.86e-11,175
+ [ox_p11_BIO] NO + XO2_BIO -> NO ; 2.7e-12, 360.
+      + .25 * CH3COCHO_BIO + .5 * CO_BIO + .25 * GLYALD_BIO + .25 * GLYOXAL_BIO + .25 * HYAC_BIO + NO2_X_BIO 
+      + HO2_X_BIO 
+  NO3 + XO2_BIO -> NO3 ; 2.40e-12
+      + .25 * CH3COCHO_BIO + 0.5 * CO_BIO + .25 * GLYALD_BIO + 0.25 * GLYOXAL_BIO + .25 * HYAC_BIO + HO2_X_BIO 
+  HO2 + XO2_BIO -> HO2 + XOOH_BIO ; 8.e-13, 700
+ [usr_RO2_XO2_BIO] M + XO2_BIO -> M 
+      + .1 * CH3COCHO_BIO + .2 * CO_BIO + .1 * GLYALD_BIO + .1 * GLYOXAL_BIO + .1 * HYAC_BIO + .4 * HO2_X_BIO
+  OH + XOOH_BIO -> OH + XO2_BIO ; 1.90e-12, 190
+ [usr_XOOH_OH_BIO] OH + XOOH_BIO -> OH
+ [soa4_ANT] OH + TOLUENE_ANT -> OH + .25 * CRESOL_ANT + .7 * TOLO2_ANT + .25 * HO2_X_ANT ; 1.7e-12, 352
+ [soa4_BMB] OH + TOLUENE_BMB -> OH + .25 * CRESOL_BMB + .7 * TOLO2_BMB + .25 * HO2_X_BMB ; 1.7e-12, 352
+  CRESOL_ANT + OH -> OH + XOH_ANT ; 3.e-12
+  CRESOL_BMB + OH -> OH + XOH_BMB ; 3.e-12
+  NO2 + XOH_ANT -> NO2 + .7 * BIGALD_ANT + .7 * HO2_X_ANT ; 1.e-11
+  NO2 + XOH_BMB -> NO2 + .7 * BIGALD_BMB + .7 * HO2_X_BMB ; 1.e-11
+ [ox_p12_ANT] NO + TOLO2_ANT -> NO ; 4.2e-12, 180
+      + .9 * BIGALD_ANT + .45 * CH3COCHO_ANT + .45 * GLYOXAL_ANT + .9 * NO2_X_ANT + .9 * HO2_X_ANT 
+ [ox_p12_BMB] NO + TOLO2_BMB -> NO ; 4.2e-12, 180
+      + .9 * BIGALD_BMB + .45 * CH3COCHO_BMB + .45 * GLYOXAL_BMB + .9 * NO2_X_BMB + .9 * HO2_X_BMB 
+  HO2 + TOLO2_ANT -> HO2 + TOLOOH_ANT ; 7.5e-13, 700
+  HO2 + TOLO2_BMB -> HO2 + TOLOOH_BMB ; 7.5e-13, 700
+  OH + TOLOOH_ANT -> OH + TOLO2_ANT ; 3.8e-12, 200
+  OH + TOLOOH_BMB -> OH + TOLO2_BMB ; 3.8e-12, 200
+ [soa2_BIO] C10H16_BIO + OH -> OH + TERPO2_BIO ; 1.2e-11, 444
+ [soa1_BIO] C10H16_BIO + O3 -> O3 + MACR_BIO + MVK_BIO + HO2_X_BIO ; 1.e-15, -732
+ [soa3_BIO] C10H16_BIO + NO3 -> NO3 + TERPO2_BIO ; 1.2e-12, 490
+ [ox_p13_BIO] NO + TERPO2_BIO -> NO + .1 * CH3COCH3_BIO + MACR_BIO + MVK_BIO + NO2_X_BIO + HO2_X_BIO ; 4.2e-12, 180
+  HO2 + TERPO2_BIO -> HO2 + TERPOOH_BIO ; 7.5e-13, 700
+  OH + TERPOOH_BIO -> OH + TERPO2_BIO ; 3.8e-12, 200
+  DMS_BIO + OH -> OH ; 9.6e-12,-234.
+ [usr_DMS_OH_BIO] DMS_BIO + OH -> OH + .5 * HO2_X_BIO
+  DMS_BIO + NO3 -> NO3 ; 1.9e-13, 520.
+  HCN_ANT + M + OH -> M + OH + HO2_X_ANT ; 4.28e-33, 0.0, 9.30e-15, -4.42, 0.8
+  HCN_BMB + M + OH -> M + OH + HO2_X_BMB ; 4.28e-33, 0.0, 9.30e-15, -4.42, 0.8
+  CH3CN_ANT + OH -> OH + HO2_X_ANT ; 7.8e-13, -1050
+  CH3CN_BMB + OH -> OH + HO2_X_BMB ; 7.8e-13, -1050
+  H2_ANT + O1D -> O1D + HO2_X_ANT ; 1.1e-10
+  H2_BIO + O1D -> O1D + HO2_X_BIO ; 1.1e-10
+  H2_BMB + O1D -> O1D + HO2_X_BMB ; 1.1e-10
+  H2_CH4 + O1D -> O1D + HO2_X_CH4 ; 1.1e-10
+  H2_INI + O1D -> O1D + HO2_X_INI ; 1.1e-10
+  H2_ANT + OH -> OH + HO2_X_ANT ; 2.8e-12, -1800
+  H2_BIO + OH -> OH + HO2_X_BIO ; 2.8e-12, -1800
+  H2_BMB + OH -> OH + HO2_X_BMB ; 2.8e-12, -1800
+  H2_CH4 + OH -> OH + HO2_X_CH4 ; 2.8e-12, -1800
+  H2_INI + OH -> OH + HO2_X_INI ; 2.8e-12, -1800
+  CH4_ANT + OH -> OH + CH3O2_ANT ; 2.45e-12, -1775
+  CH4_BIO + OH -> OH + CH3O2_BIO ; 2.45e-12, -1775
+  CH4_BMB + OH -> OH + CH3O2_BMB ; 2.45e-12, -1775
+  CH4_CH4 + OH -> OH + CH3O2_CH4 ; 2.45e-12, -1775
+  CH4_ANT + O1D -> O1D + .25 * CH2O_ANT + .75 * CH3O2_ANT + .05 * H2_ANT + .4 * HO2_X_ANT ; 1.5e-10
+  CH4_BIO + O1D -> O1D + .25 * CH2O_BIO + .75 * CH3O2_BIO + .05 * H2_BIO + .4 * HO2_X_BIO ; 1.5e-10
+  CH4_BMB + O1D -> O1D + .25 * CH2O_BMB + .75 * CH3O2_BMB + .05 * H2_BMB + .4 * HO2_X_BMB ; 1.5e-10
+  CH4_CH4 + O1D -> O1D + .25 * CH2O_CH4 + .75 * CH3O2_CH4 + .05 * H2_CH4 + .4 * HO2_X_CH4 ; 1.5e-10
+ [ox_p2_ANT] CH3O2_ANT + NO -> NO + CH2O_ANT + NO2_X_ANT + HO2_X_ANT ; 2.8e-12, 300
+ [ox_p2_BIO] CH3O2_BIO + NO -> NO + CH2O_BIO + NO2_X_BIO + HO2_X_BIO ; 2.8e-12, 300
+ [ox_p2_BMB] CH3O2_BMB + NO -> NO + CH2O_BMB + NO2_X_BMB + HO2_X_BMB ; 2.8e-12, 300
+ [ox_p2_CH4] CH3O2_CH4 + NO -> NO + CH2O_CH4 + NO2_X_CH4 + HO2_X_CH4 ; 2.8e-12, 300
+ [ox_p2_INI] CH3O2_INI + NO -> NO + CH2O_INI + NO2_X_INI + HO2_X_INI ; 2.8e-12, 300
+ [usr_RO2_CH3O2_ANT] CH3O2_ANT + M -> M + .7 * CH2O_ANT + .3 * CH3OH_ANT + .4 * HO2_X_ANT
+ [usr_RO2_CH3O2_BIO] CH3O2_BIO + M -> M + .7 * CH2O_BIO + .3 * CH3OH_BIO + .4 * HO2_X_BIO
+ [usr_RO2_CH3O2_BMB] CH3O2_BMB + M -> M + .7 * CH2O_BMB + .3 * CH3OH_BMB + .4 * HO2_X_BMB
+ [usr_RO2_CH3O2_CH4] CH3O2_CH4 + M -> M + .7 * CH2O_CH4 + .3 * CH3OH_CH4 + .4 * HO2_X_CH4
+ [usr_RO2_CH3O2_INI] CH3O2_INI + M -> M + .7 * CH2O_INI + .3 * CH3OH_INI + .4 * HO2_X_INI
+  CH3O2_ANT + HO2 -> HO2 + CH3OOH_ANT ; 4.1e-13, 750
+  CH3O2_BIO + HO2 -> HO2 + CH3OOH_BIO ; 4.1e-13, 750
+  CH3O2_BMB + HO2 -> HO2 + CH3OOH_BMB ; 4.1e-13, 750
+  CH3O2_CH4 + HO2 -> HO2 + CH3OOH_CH4 ; 4.1e-13, 750
+  CH3O2_INI + HO2 -> HO2 + CH3OOH_INI ; 4.1e-13, 750
+  CH3OOH_ANT + OH -> OH + .3 * CH2O_ANT + .7 * CH3O2_ANT ; 3.8e-12, 200
+  CH3OOH_BIO + OH -> OH + .3 * CH2O_BIO + .7 * CH3O2_BIO ; 3.8e-12, 200
+  CH3OOH_BMB + OH -> OH + .3 * CH2O_BMB + .7 * CH3O2_BMB ; 3.8e-12, 200
+  CH3OOH_CH4 + OH -> OH + .3 * CH2O_CH4 + .7 * CH3O2_CH4 ; 3.8e-12, 200
+  CH3OOH_INI + OH -> OH + .3 * CH2O_INI + .7 * CH3O2_INI ; 3.8e-12, 200
+  CH2O_ANT + NO3 -> NO3 + CO_ANT + HO2_X_ANT ; 6.0e-13, -2058
+  CH2O_BIO + NO3 -> NO3 + CO_BIO + HO2_X_BIO ; 6.0e-13, -2058
+  CH2O_BMB + NO3 -> NO3 + CO_BMB + HO2_X_BMB ; 6.0e-13, -2058
+  CH2O_CH4 + NO3 -> NO3 + CO_CH4 + HO2_X_CH4 ; 6.0e-13, -2058
+  CH2O_INI + NO3 -> NO3 + CO_INI + HO2_X_INI ; 6.0e-13, -2058
+  CH2O_ANT + OH -> OH + CO_ANT + HO2_X_ANT ; 9.e-12
+  CH2O_BIO + OH -> OH + CO_BIO + HO2_X_BIO ; 9.e-12
+  CH2O_BMB + OH -> OH + CO_BMB + HO2_X_BMB ; 9.e-12
+  CH2O_CH4 + OH -> OH + CO_CH4 + HO2_X_CH4 ; 9.e-12
+  CH2O_INI + OH -> OH + CO_INI + HO2_X_INI ; 9.e-12
+  CO_ANT + M + OH -> M + OH + HO2_X_ANT ; 5.90e-33, 1.4,  1.10e-12, -1.3, 0.6
+  CO_BIO + M + OH -> M + OH + HO2_X_BIO ; 5.90e-33, 1.4,  1.10e-12, -1.3, 0.6
+  CO_BMB + M + OH -> M + OH + HO2_X_BMB ; 5.90e-33, 1.4,  1.10e-12, -1.3, 0.6
+  CO_CH4 + M + OH -> M + OH + HO2_X_CH4 ; 5.90e-33, 1.4,  1.10e-12, -1.3, 0.6
+  CO_INI + M + OH -> M + OH + HO2_X_INI ; 5.90e-33, 1.4,  1.10e-12, -1.3, 0.6
+ [usr_CO_OH_b_ANT] CO_ANT + OH -> OH + HO2_X_ANT
+ [usr_CO_OH_b_BIO] CO_BIO + OH -> OH + HO2_X_BIO
+ [usr_CO_OH_b_BMB] CO_BMB + OH -> OH + HO2_X_BMB
+ [usr_CO_OH_b_CH4] CO_CH4 + OH -> OH + HO2_X_CH4
+ [usr_CO_OH_b_INI] CO_INI + OH -> OH + HO2_X_INI
+  CH3OH_ANT + OH -> OH + CH2O_ANT + HO2_X_ANT ; 7.3e-12,-620
+  CH3OH_BIO + OH -> OH + CH2O_BIO + HO2_X_BIO ; 7.3e-12,-620
+  CH3OH_BMB + OH -> OH + CH2O_BMB + HO2_X_BMB ; 7.3e-12,-620
+  CH3OH_CH4 + OH -> OH + CH2O_CH4 + HO2_X_CH4 ; 7.3e-12,-620
+  CH3OH_INI + OH -> OH + CH2O_INI + HO2_X_INI ; 7.3e-12,-620
+  HCOOH_ANT + OH -> OH + HO2_X_ANT ; 4.5e-13
+  HCOOH_BIO + OH -> OH + HO2_X_BIO ; 4.5e-13
+  HCOOH_BMB + OH -> OH + HO2_X_BMB ; 4.5e-13
+  HCOOH_CH4 + OH -> OH + HO2_X_CH4 ; 4.5e-13
+  HCOOH_INI + OH -> OH + HO2_X_INI ; 4.5e-13
+  CH2O_ANT + HO2 -> HO2 + HOCH2OO_ANT ; 9.7e-15, 625
+  CH2O_BIO + HO2 -> HO2 + HOCH2OO_BIO ; 9.7e-15, 625
+  CH2O_BMB + HO2 -> HO2 + HOCH2OO_BMB ; 9.7e-15, 625
+  CH2O_CH4 + HO2 -> HO2 + HOCH2OO_CH4 ; 9.7e-15, 625
+  CH2O_INI + HO2 -> HO2 + HOCH2OO_INI ; 9.7e-15, 625
+  HOCH2OO_ANT -> CH2O_ANT + HO2_X_ANT ; 2.4e12, -7000
+  HOCH2OO_BIO -> CH2O_BIO + HO2_X_BIO ; 2.4e12, -7000
+  HOCH2OO_BMB -> CH2O_BMB + HO2_X_BMB ; 2.4e12, -7000
+  HOCH2OO_CH4 -> CH2O_CH4 + HO2_X_CH4 ; 2.4e12, -7000
+  HOCH2OO_INI -> CH2O_INI + HO2_X_INI ; 2.4e12, -7000
+  HOCH2OO_ANT + NO -> NO + HCOOH_ANT + NO2_X_ANT + HO2_X_ANT ; 2.6e-12, 265
+  HOCH2OO_BIO + NO -> NO + HCOOH_BIO + NO2_X_BIO + HO2_X_BIO ; 2.6e-12, 265
+  HOCH2OO_BMB + NO -> NO + HCOOH_BMB + NO2_X_BMB + HO2_X_BMB ; 2.6e-12, 265
+  HOCH2OO_CH4 + NO -> NO + HCOOH_CH4 + NO2_X_CH4 + HO2_X_CH4 ; 2.6e-12, 265
+  HOCH2OO_INI + NO -> NO + HCOOH_INI + NO2_X_INI + HO2_X_INI ; 2.6e-12, 265
+  HO2 + HOCH2OO_ANT -> HO2 + HCOOH_ANT ; 7.5e-13, 700
+  HO2 + HOCH2OO_BIO -> HO2 + HCOOH_BIO ; 7.5e-13, 700
+  HO2 + HOCH2OO_BMB -> HO2 + HCOOH_BMB ; 7.5e-13, 700
+  HO2 + HOCH2OO_CH4 -> HO2 + HCOOH_CH4 ; 7.5e-13, 700
+  HO2 + HOCH2OO_INI -> HO2 + HCOOH_INI ; 7.5e-13, 700
+  C2H2_ANT + M + OH -> M ; 5.5e-30,0,8.3e-13,-2,.6
+      + OH + .35 * CO_ANT + .65 * GLYOXAL_ANT + .35 * HCOOH_ANT + .35 * HO2_X_ANT 
+  C2H2_BMB + M + OH -> M ; 5.5e-30,0,8.3e-13,-2,.6
+      + OH + .35 * CO_BMB + .65 * GLYOXAL_BMB + .35 * HCOOH_BMB + .35 * HO2_X_BMB 
+ [tag_C2H4_OH_ANT] C2H4_ANT + M + OH -> M ; 1.e-28,.8, 8.8e-12,0., .6
+      + OH + .5 * CH2O_ANT + .75 * EO2_ANT + .25 * HO2_X_ANT 
+ [tag_C2H4_OH_BIO] C2H4_BIO + M + OH -> M ; 1.e-28,.8, 8.8e-12,0., .6
+      + OH + .5 * CH2O_BIO + .75 * EO2_BIO + .25 * HO2_X_BIO 
+ [tag_C2H4_OH_BMB] C2H4_BMB + M + OH -> M ; 1.e-28,.8, 8.8e-12,0., .6
+      + OH + .5 * CH2O_BMB + .75 * EO2_BMB + .25 * HO2_X_BMB 
+ [ox_l6_ANT] C2H4_ANT + O3 -> O3 + CH2O_ANT + .5 * CO_ANT + .5 * HCOOH_ANT + .12 * HO2_X_ANT ; 1.2e-14, -2630
+ [ox_l6_BIO] C2H4_BIO + O3 -> O3 + CH2O_BIO + .5 * CO_BIO + .5 * HCOOH_BIO + .12 * HO2_X_BIO ; 1.2e-14, -2630
+ [ox_l6_BMB] C2H4_BMB + O3 -> O3 + CH2O_BMB + .5 * CO_BMB + .5 * HCOOH_BMB + .12 * HO2_X_BMB ; 1.2e-14, -2630
+ [ox_p16_ANT] EO2_ANT + NO -> NO + EO_ANT + NO2_X_ANT ; 4.2e-12,180
+ [ox_p16_BIO] EO2_BIO + NO -> NO + EO_BIO + NO2_X_BIO ; 4.2e-12,180
+ [ox_p16_BMB] EO2_BMB + NO -> NO + EO_BMB + NO2_X_BMB ; 4.2e-12,180
+  EO_ANT + O2 -> O2 + GLYALD_ANT + HO2_X_ANT ; 1.e-14
+  EO_BIO + O2 -> O2 + GLYALD_BIO + HO2_X_BIO ; 1.e-14
+  EO_BMB + O2 -> O2 + GLYALD_BMB + HO2_X_BMB ; 1.e-14
+  EO_ANT -> 2 * CH2O_ANT + HO2_X_ANT ; 1.6e11,-4150
+  EO_BIO -> 2 * CH2O_BIO + HO2_X_BIO ; 1.6e11,-4150
+  EO_BMB -> 2 * CH2O_BMB + HO2_X_BMB ; 1.6e11,-4150
+  C2H6_ANT + OH -> OH + C2H5O2_ANT ; 8.7e-12, -1070
+  C2H6_BIO + OH -> OH + C2H5O2_BIO ; 8.7e-12, -1070
+  C2H6_BMB + OH -> OH + C2H5O2_BMB ; 8.7e-12, -1070
+  C2H6_INI + OH -> OH + C2H5O2_INI ; 8.7e-12, -1070
+ [ox_p5_ANT] C2H5O2_ANT + NO -> NO + CH3CHO_ANT + NO2_X_ANT + HO2_X_ANT ; 2.6e-12, 365
+ [ox_p5_BIO] C2H5O2_BIO + NO -> NO + CH3CHO_BIO + NO2_X_BIO + HO2_X_BIO ; 2.6e-12, 365
+ [ox_p5_BMB] C2H5O2_BMB + NO -> NO + CH3CHO_BMB + NO2_X_BMB + HO2_X_BMB ; 2.6e-12, 365
+ [ox_p5_INI] C2H5O2_INI + NO -> NO + CH3CHO_INI + NO2_X_INI + HO2_X_INI ; 2.6e-12, 365
+  C2H5O2_ANT + HO2 -> HO2 + C2H5OOH_ANT ; 7.5e-13, 700
+  C2H5O2_BIO + HO2 -> HO2 + C2H5OOH_BIO ; 7.5e-13, 700
+  C2H5O2_BMB + HO2 -> HO2 + C2H5OOH_BMB ; 7.5e-13, 700
+  C2H5O2_INI + HO2 -> HO2 + C2H5OOH_INI ; 7.5e-13, 700
+ [usr_RO2_C2H5O2_ANT] C2H5O2_ANT + M -> M + .2 * C2H5OH_ANT + .8 * CH3CHO_ANT + .6 * HO2_X_ANT
+ [usr_RO2_C2H5O2_BIO] C2H5O2_BIO + M -> M + .2 * C2H5OH_BIO + .8 * CH3CHO_BIO + .6 * HO2_X_BIO
+ [usr_RO2_C2H5O2_BMB] C2H5O2_BMB + M -> M + .2 * C2H5OH_BMB + .8 * CH3CHO_BMB + .6 * HO2_X_BMB
+ [usr_RO2_C2H5O2_INI] C2H5O2_INI + M -> M + .2 * C2H5OH_INI + .8 * CH3CHO_INI + .6 * HO2_X_INI
+  C2H5OOH_ANT + OH -> OH + .5 * C2H5O2_ANT + .5 * CH3CHO_ANT ; 3.8e-12, 200
+  C2H5OOH_BIO + OH -> OH + .5 * C2H5O2_BIO + .5 * CH3CHO_BIO ; 3.8e-12, 200
+  C2H5OOH_BMB + OH -> OH + .5 * C2H5O2_BMB + .5 * CH3CHO_BMB ; 3.8e-12, 200
+  C2H5OOH_INI + OH -> OH + .5 * C2H5O2_INI + .5 * CH3CHO_INI ; 3.8e-12, 200
+  CH3CHO_ANT + OH -> OH + CH3CO3_ANT ; 5.6e-12, 270
+  CH3CHO_BIO + OH -> OH + CH3CO3_BIO ; 5.6e-12, 270
+  CH3CHO_BMB + OH -> OH + CH3CO3_BMB ; 5.6e-12, 270
+  CH3CHO_INI + OH -> OH + CH3CO3_INI ; 5.6e-12, 270
+  CH3CHO_ANT + NO3 -> NO3 + CH3CO3_ANT ; 1.4e-12, -1900
+  CH3CHO_BIO + NO3 -> NO3 + CH3CO3_BIO ; 1.4e-12, -1900
+  CH3CHO_BMB + NO3 -> NO3 + CH3CO3_BMB ; 1.4e-12, -1900
+  CH3CHO_INI + NO3 -> NO3 + CH3CO3_INI ; 1.4e-12, -1900
+ O_X_STR + OH -> OH + HO2_X_STR ; 2.2e-11, 120 
+ O_X_INI + OH -> OH + HO2_X_INI ; 2.2e-11, 120 
+ O_X_CH4 + OH -> OH + HO2_X_CH4 ; 2.2e-11, 120 
+ O_X_XTR + OH -> OH + HO2_X_XTR ; 2.2e-11, 120 
+ O_X_ANT + OH -> OH + HO2_X_ANT ; 2.2e-11, 120 
+ O_X_BMB + OH -> OH + HO2_X_BMB ; 2.2e-11, 120 
+ O_X_BIO + OH -> OH + HO2_X_BIO ; 2.2e-11, 120 
+ OH + O3_X_STR -> OH + HO2_X_STR ; 1.7e-12, -940 
+ OH + O3_X_INI -> OH + HO2_X_INI ; 1.7e-12, -940 
+ OH + O3_X_CH4 -> OH + HO2_X_CH4 ; 1.7e-12, -940 
+ OH + O3_X_XTR -> OH + HO2_X_XTR ; 1.7e-12, -940 
+ OH + O3_X_ANT -> OH + HO2_X_ANT ; 1.7e-12, -940 
+ OH + O3_X_BMB -> OH + HO2_X_BMB ; 1.7e-12, -940 
+ OH + O3_X_BIO -> OH + HO2_X_BIO ; 1.7e-12, -940 
+ [usr_OA_O2_X_STR] O_X_STR + O2 + M -> O3_X_STR + O2 + M 
+ [usr_OA_O2_X_INI] O_X_INI + O2 + M -> O3_X_INI + O2 + M 
+ [usr_OA_O2_X_CH4] O_X_CH4 + O2 + M -> O3_X_CH4 + O2 + M 
+ [usr_OA_O2_X_XTR] O_X_XTR + O2 + M -> O3_X_XTR + O2 + M 
+ [usr_OA_O2_X_ANT] O_X_ANT + O2 + M -> O3_X_ANT + O2 + M 
+ [usr_OA_O2_X_BMB] O_X_BMB + O2 + M -> O3_X_BMB + O2 + M 
+ [usr_OA_O2_X_BIO] O_X_BIO + O2 + M -> O3_X_BIO + O2 + M 
+ O_X_STR + O3 -> O3 ; 8e-12, -2060 
+ O_X_INI + O3 -> O3 ; 8e-12, -2060 
+ O_X_CH4 + O3 -> O3 ; 8e-12, -2060 
+ O_X_XTR + O3 -> O3 ; 8e-12, -2060 
+ O_X_ANT + O3 -> O3 ; 8e-12, -2060 
+ O_X_BMB + O3 -> O3 ; 8e-12, -2060 
+ O_X_BIO + O3 -> O3 ; 8e-12, -2060 
+ O3_X_STR + O -> O ; 8e-12, -2060 
+ O3_X_INI + O -> O ; 8e-12, -2060 
+ O3_X_CH4 + O -> O ; 8e-12, -2060 
+ O3_X_XTR + O -> O ; 8e-12, -2060 
+ O3_X_ANT + O -> O ; 8e-12, -2060 
+ O3_X_BMB + O -> O ; 8e-12, -2060 
+ O3_X_BIO + O -> O ; 8e-12, -2060 
+ O1D_X_STR + N2 -> O_X_STR + N2 ; 2.1e-11, 115 
+ O1D_X_INI + N2 -> O_X_INI + N2 ; 2.1e-11, 115 
+ O1D_X_CH4 + N2 -> O_X_CH4 + N2 ; 2.1e-11, 115 
+ O1D_X_XTR + N2 -> O_X_XTR + N2 ; 2.1e-11, 115 
+ O1D_X_ANT + N2 -> O_X_ANT + N2 ; 2.1e-11, 115 
+ O1D_X_BMB + N2 -> O_X_BMB + N2 ; 2.1e-11, 115 
+ O1D_X_BIO + N2 -> O_X_BIO + N2 ; 2.1e-11, 115 
+ O1D_X_STR + O2 -> O_X_STR + O2 ; 3.2e-11 , 70 
+ O1D_X_INI + O2 -> O_X_INI + O2 ; 3.2e-11 , 70 
+ O1D_X_CH4 + O2 -> O_X_CH4 + O2 ; 3.2e-11 , 70 
+ O1D_X_XTR + O2 -> O_X_XTR + O2 ; 3.2e-11 , 70 
+ O1D_X_ANT + O2 -> O_X_ANT + O2 ; 3.2e-11 , 70 
+ O1D_X_BMB + O2 -> O_X_BMB + O2 ; 3.2e-11 , 70 
+ O1D_X_BIO + O2 -> O_X_BIO + O2 ; 3.2e-11 , 70 
+ O1D_X_STR + H2O -> H2O ; 2.2e-10 
+ O1D_X_INI + H2O -> H2O ; 2.2e-10 
+ O1D_X_CH4 + H2O -> H2O ; 2.2e-10 
+ O1D_X_XTR + H2O -> H2O ; 2.2e-10 
+ O1D_X_ANT + H2O -> H2O ; 2.2e-10 
+ O1D_X_BMB + H2O -> H2O ; 2.2e-10 
+ O1D_X_BIO + H2O -> H2O ; 2.2e-10 
+ H2 + O1D_X_STR -> H2 ; 1.1e-10 
+ H2 + O1D_X_INI -> H2 ; 1.1e-10 
+ H2 + O1D_X_CH4 -> H2 ; 1.1e-10 
+ H2 + O1D_X_XTR -> H2 ; 1.1e-10 
+ H2 + O1D_X_ANT -> H2 ; 1.1e-10 
+ H2 + O1D_X_BMB -> H2 ; 1.1e-10 
+ H2 + O1D_X_BIO -> H2 ; 1.1e-10 
+ HO2 + O_X_STR -> HO2 ; 3e-11, 200 
+ HO2 + O_X_INI -> HO2 ; 3e-11, 200 
+ HO2 + O_X_CH4 -> HO2 ; 3e-11, 200 
+ HO2 + O_X_XTR -> HO2 ; 3e-11, 200 
+ HO2 + O_X_ANT -> HO2 ; 3e-11, 200 
+ HO2 + O_X_BMB -> HO2 ; 3e-11, 200 
+ HO2 + O_X_BIO -> HO2 ; 3e-11, 200 
+ HO2 + O3_X_STR -> HO2 ; 1.e-14, -490 
+ HO2 + O3_X_INI -> HO2 ; 1.e-14, -490 
+ HO2 + O3_X_CH4 -> HO2 ; 1.e-14, -490 
+ HO2 + O3_X_XTR -> HO2 ; 1.e-14, -490 
+ HO2 + O3_X_ANT -> HO2 ; 1.e-14, -490 
+ HO2 + O3_X_BMB -> HO2 ; 1.e-14, -490 
+ HO2 + O3_X_BIO -> HO2 ; 1.e-14, -490 
+ N2O + O1D_X_STR -> N2O ; 6.7e-11 
+ N2O + O1D_X_INI -> N2O ; 6.7e-11 
+ N2O + O1D_X_CH4 -> N2O ; 6.7e-11 
+ N2O + O1D_X_XTR -> N2O ; 6.7e-11 
+ N2O + O1D_X_ANT -> N2O ; 6.7e-11 
+ N2O + O1D_X_BMB -> N2O ; 6.7e-11 
+ N2O + O1D_X_BIO -> N2O ; 6.7e-11 
+ N2O + O1D_X_STR -> N2O ; 4.9e-11 
+ N2O + O1D_X_INI -> N2O ; 4.9e-11 
+ N2O + O1D_X_CH4 -> N2O ; 4.9e-11 
+ N2O + O1D_X_XTR -> N2O ; 4.9e-11 
+ N2O + O1D_X_ANT -> N2O ; 4.9e-11 
+ N2O + O1D_X_BMB -> N2O ; 4.9e-11 
+ N2O + O1D_X_BIO -> N2O ; 4.9e-11 
+ NO + O3_X_STR -> NO + NO2_X_STR ; 3e-12, -1500 
+ NO + O3_X_INI -> NO + NO2_X_INI ; 3e-12, -1500 
+ NO + O3_X_CH4 -> NO + NO2_X_CH4 ; 3e-12, -1500 
+ NO + O3_X_XTR -> NO + NO2_X_XTR ; 3e-12, -1500 
+ NO + O3_X_ANT -> NO + NO2_X_ANT ; 3e-12, -1500 
+ NO + O3_X_BMB -> NO + NO2_X_BMB ; 3e-12, -1500 
+ NO + O3_X_BIO -> NO + NO2_X_BIO ; 3e-12, -1500 
+ NO2 + O_X_STR -> NO2 ; 5.1e-12, 210 
+ NO2 + O_X_INI -> NO2 ; 5.1e-12, 210 
+ NO2 + O_X_CH4 -> NO2 ; 5.1e-12, 210 
+ NO2 + O_X_XTR -> NO2 ; 5.1e-12, 210 
+ NO2 + O_X_ANT -> NO2 ; 5.1e-12, 210 
+ NO2 + O_X_BMB -> NO2 ; 5.1e-12, 210 
+ NO2 + O_X_BIO -> NO2 ; 5.1e-12, 210 
+ NO2_X_STR + O -> O ; 5.1e-12, 210 
+ NO2_X_INI + O -> O ; 5.1e-12, 210 
+ NO2_X_CH4 + O -> O ; 5.1e-12, 210 
+ NO2_X_XTR + O -> O ; 5.1e-12, 210 
+ NO2_X_ANT + O -> O ; 5.1e-12, 210 
+ NO2_X_BMB + O -> O ; 5.1e-12, 210 
+ NO2_X_BIO + O -> O ; 5.1e-12, 210 
+ NO2_X_STR + O3 -> NO3_X_STR + O3 ; 1.2e-13, -2450 
+ NO2_X_INI + O3 -> NO3_X_INI + O3 ; 1.2e-13, -2450 
+ NO2_X_CH4 + O3 -> NO3_X_CH4 + O3 ; 1.2e-13, -2450 
+ NO2_X_XTR + O3 -> NO3_X_XTR + O3 ; 1.2e-13, -2450 
+ NO2_X_ANT + O3 -> NO3_X_ANT + O3 ; 1.2e-13, -2450 
+ NO2_X_BMB + O3 -> NO3_X_BMB + O3 ; 1.2e-13, -2450 
+ NO2_X_BIO + O3 -> NO3_X_BIO + O3 ; 1.2e-13, -2450 
+ NO2 + O3_X_STR -> NO2 ; 1.2e-13, -2450 
+ NO2 + O3_X_INI -> NO2 ; 1.2e-13, -2450 
+ NO2 + O3_X_CH4 -> NO2 ; 1.2e-13, -2450 
+ NO2 + O3_X_XTR -> NO2 ; 1.2e-13, -2450 
+ NO2 + O3_X_ANT -> NO2 ; 1.2e-13, -2450 
+ NO2 + O3_X_BMB -> NO2 ; 1.2e-13, -2450 
+ NO2 + O3_X_BIO -> NO2 ; 1.2e-13, -2450 
+ NO3_X_STR + HO2 -> HO2 + NO2_X_STR ; 3.5e-12 
+ NO3_X_INI + HO2 -> HO2 + NO2_X_INI ; 3.5e-12 
+ NO3_X_CH4 + HO2 -> HO2 + NO2_X_CH4 ; 3.5e-12 
+ NO3_X_XTR + HO2 -> HO2 + NO2_X_XTR ; 3.5e-12 
+ NO3_X_ANT + HO2 -> HO2 + NO2_X_ANT ; 3.5e-12 
+ NO3_X_BMB + HO2 -> HO2 + NO2_X_BMB ; 3.5e-12 
+ NO3_X_BIO + HO2 -> HO2 + NO2_X_BIO ; 3.5e-12 
+ NO2_X_STR + NO3 + M -> NO3NO2_X_STR + NO3 + M ; 2.e-30,4.4, 1.4e-12,.7, .6 
+ NO2_X_INI + NO3 + M -> NO3NO2_X_INI + NO3 + M ; 2.e-30,4.4, 1.4e-12,.7, .6 
+ NO2_X_CH4 + NO3 + M -> NO3NO2_X_CH4 + NO3 + M ; 2.e-30,4.4, 1.4e-12,.7, .6 
+ NO2_X_XTR + NO3 + M -> NO3NO2_X_XTR + NO3 + M ; 2.e-30,4.4, 1.4e-12,.7, .6 
+ NO2_X_ANT + NO3 + M -> NO3NO2_X_ANT + NO3 + M ; 2.e-30,4.4, 1.4e-12,.7, .6 
+ NO2_X_BMB + NO3 + M -> NO3NO2_X_BMB + NO3 + M ; 2.e-30,4.4, 1.4e-12,.7, .6 
+ NO2_X_BIO + NO3 + M -> NO3NO2_X_BIO + NO3 + M ; 2.e-30,4.4, 1.4e-12,.7, .6 
+ NO2 + NO3_X_STR + M -> NO2NO3_X_STR + NO2 + M ; 2.e-30,4.4, 1.4e-12,.7, .6 
+ NO2 + NO3_X_INI + M -> NO2NO3_X_INI + NO2 + M ; 2.e-30,4.4, 1.4e-12,.7, .6 
+ NO2 + NO3_X_CH4 + M -> NO2NO3_X_CH4 + NO2 + M ; 2.e-30,4.4, 1.4e-12,.7, .6 
+ NO2 + NO3_X_XTR + M -> NO2NO3_X_XTR + NO2 + M ; 2.e-30,4.4, 1.4e-12,.7, .6 
+ NO2 + NO3_X_ANT + M -> NO2NO3_X_ANT + NO2 + M ; 2.e-30,4.4, 1.4e-12,.7, .6 
+ NO2 + NO3_X_BMB + M -> NO2NO3_X_BMB + NO2 + M ; 2.e-30,4.4, 1.4e-12,.7, .6 
+ NO2 + NO3_X_BIO + M -> NO2NO3_X_BIO + NO2 + M ; 2.e-30,4.4, 1.4e-12,.7, .6 
+ [usr_XNO2NO3_M_X_STR] NO3NO2_X_STR + M -> NO2_X_STR + M 
+ [usr_XNO2NO3_M_X_INI] NO3NO2_X_INI + M -> NO2_X_INI + M 
+ [usr_XNO2NO3_M_X_CH4] NO3NO2_X_CH4 + M -> NO2_X_CH4 + M 
+ [usr_XNO2NO3_M_X_XTR] NO3NO2_X_XTR + M -> NO2_X_XTR + M 
+ [usr_XNO2NO3_M_X_ANT] NO3NO2_X_ANT + M -> NO2_X_ANT + M 
+ [usr_XNO2NO3_M_X_BMB] NO3NO2_X_BMB + M -> NO2_X_BMB + M 
+ [usr_XNO2NO3_M_X_BIO] NO3NO2_X_BIO + M -> NO2_X_BIO + M 
+ [usr_NO2XNO3_M_X_STR] NO2NO3_X_STR + M -> NO3_X_STR + M 
+ [usr_NO2XNO3_M_X_INI] NO2NO3_X_INI + M -> NO3_X_INI + M 
+ [usr_NO2XNO3_M_X_CH4] NO2NO3_X_CH4 + M -> NO3_X_CH4 + M 
+ [usr_NO2XNO3_M_X_XTR] NO2NO3_X_XTR + M -> NO3_X_XTR + M 
+ [usr_NO2XNO3_M_X_ANT] NO2NO3_X_ANT + M -> NO3_X_ANT + M 
+ [usr_NO2XNO3_M_X_BMB] NO2NO3_X_BMB + M -> NO3_X_BMB + M 
+ [usr_NO2XNO3_M_X_BIO] NO2NO3_X_BIO + M -> NO3_X_BIO + M 
+ NO2_X_STR + OH + M -> HNO3_X_STR + OH + M ; 1.80e-30, 3.0, 2.8e-11, 0.0, 0.6 
+ NO2_X_INI + OH + M -> HNO3_X_INI + OH + M ; 1.80e-30, 3.0, 2.8e-11, 0.0, 0.6 
+ NO2_X_CH4 + OH + M -> HNO3_X_CH4 + OH + M ; 1.80e-30, 3.0, 2.8e-11, 0.0, 0.6 
+ NO2_X_XTR + OH + M -> HNO3_X_XTR + OH + M ; 1.80e-30, 3.0, 2.8e-11, 0.0, 0.6 
+ NO2_X_ANT + OH + M -> HNO3_X_ANT + OH + M ; 1.80e-30, 3.0, 2.8e-11, 0.0, 0.6 
+ NO2_X_BMB + OH + M -> HNO3_X_BMB + OH + M ; 1.80e-30, 3.0, 2.8e-11, 0.0, 0.6 
+ NO2_X_BIO + OH + M -> HNO3_X_BIO + OH + M ; 1.80e-30, 3.0, 2.8e-11, 0.0, 0.6 
+ [usr_XHNO3_OH_X_STR] HNO3_X_STR + OH -> NO3_X_STR + OH 
+ [usr_XHNO3_OH_X_INI] HNO3_X_INI + OH -> NO3_X_INI + OH 
+ [usr_XHNO3_OH_X_CH4] HNO3_X_CH4 + OH -> NO3_X_CH4 + OH 
+ [usr_XHNO3_OH_X_XTR] HNO3_X_XTR + OH -> NO3_X_XTR + OH 
+ [usr_XHNO3_OH_X_ANT] HNO3_X_ANT + OH -> NO3_X_ANT + OH 
+ [usr_XHNO3_OH_X_BMB] HNO3_X_BMB + OH -> NO3_X_BMB + OH 
+ [usr_XHNO3_OH_X_BIO] HNO3_X_BIO + OH -> NO3_X_BIO + OH 
+ NO3_X_STR + NO -> 2 * NO2_X_STR + NO ; 1.5e-11, 170 
+ NO3_X_INI + NO -> 2 * NO2_X_INI + NO ; 1.5e-11, 170 
+ NO3_X_CH4 + NO -> 2 * NO2_X_CH4 + NO ; 1.5e-11, 170 
+ NO3_X_XTR + NO -> 2 * NO2_X_XTR + NO ; 1.5e-11, 170 
+ NO3_X_ANT + NO -> 2 * NO2_X_ANT + NO ; 1.5e-11, 170 
+ NO3_X_BMB + NO -> 2 * NO2_X_BMB + NO ; 1.5e-11, 170 
+ NO3_X_BIO + NO -> 2 * NO2_X_BIO + NO ; 1.5e-11, 170 
+ NO2_X_STR + HO2 + M -> HO2NO2_X_STR + HO2 + M ; 2.0e-31,3.4, 2.9e-12,1.1, .6 
+ NO2_X_INI + HO2 + M -> HO2NO2_X_INI + HO2 + M ; 2.0e-31,3.4, 2.9e-12,1.1, .6 
+ NO2_X_CH4 + HO2 + M -> HO2NO2_X_CH4 + HO2 + M ; 2.0e-31,3.4, 2.9e-12,1.1, .6 
+ NO2_X_XTR + HO2 + M -> HO2NO2_X_XTR + HO2 + M ; 2.0e-31,3.4, 2.9e-12,1.1, .6 
+ NO2_X_ANT + HO2 + M -> HO2NO2_X_ANT + HO2 + M ; 2.0e-31,3.4, 2.9e-12,1.1, .6 
+ NO2_X_BMB + HO2 + M -> HO2NO2_X_BMB + HO2 + M ; 2.0e-31,3.4, 2.9e-12,1.1, .6 
+ NO2_X_BIO + HO2 + M -> HO2NO2_X_BIO + HO2 + M ; 2.0e-31,3.4, 2.9e-12,1.1, .6 
+ HO2NO2_X_STR + OH -> NO2_X_STR + OH ; 1.3e-12, 380 
+ HO2NO2_X_INI + OH -> NO2_X_INI + OH ; 1.3e-12, 380 
+ HO2NO2_X_CH4 + OH -> NO2_X_CH4 + OH ; 1.3e-12, 380 
+ HO2NO2_X_XTR + OH -> NO2_X_XTR + OH ; 1.3e-12, 380 
+ HO2NO2_X_ANT + OH -> NO2_X_ANT + OH ; 1.3e-12, 380 
+ HO2NO2_X_BMB + OH -> NO2_X_BMB + OH ; 1.3e-12, 380 
+ HO2NO2_X_BIO + OH -> NO2_X_BIO + OH ; 1.3e-12, 380 
+ [usr_XHO2NO2_M_X_STR] HO2NO2_X_STR + M -> NO2_X_STR + M 
+ [usr_XHO2NO2_M_X_INI] HO2NO2_X_INI + M -> NO2_X_INI + M 
+ [usr_XHO2NO2_M_X_CH4] HO2NO2_X_CH4 + M -> NO2_X_CH4 + M 
+ [usr_XHO2NO2_M_X_XTR] HO2NO2_X_XTR + M -> NO2_X_XTR + M 
+ [usr_XHO2NO2_M_X_ANT] HO2NO2_X_ANT + M -> NO2_X_ANT + M 
+ [usr_XHO2NO2_M_X_BMB] HO2NO2_X_BMB + M -> NO2_X_BMB + M 
+ [usr_XHO2NO2_M_X_BIO] HO2NO2_X_BIO + M -> NO2_X_BIO + M 
+ [usr_XNO2NO3_aer_X_STR] NO3NO2_X_STR -> HNO3_X_STR 
+ [usr_XNO2NO3_aer_X_INI] NO3NO2_X_INI -> HNO3_X_INI 
+ [usr_XNO2NO3_aer_X_CH4] NO3NO2_X_CH4 -> HNO3_X_CH4 
+ [usr_XNO2NO3_aer_X_XTR] NO3NO2_X_XTR -> HNO3_X_XTR 
+ [usr_XNO2NO3_aer_X_ANT] NO3NO2_X_ANT -> HNO3_X_ANT 
+ [usr_XNO2NO3_aer_X_BMB] NO3NO2_X_BMB -> HNO3_X_BMB 
+ [usr_XNO2NO3_aer_X_BIO] NO3NO2_X_BIO -> HNO3_X_BIO 
+ [usr_NO2XNO3_aer_X_STR] NO2NO3_X_STR -> HNO3_X_STR 
+ [usr_NO2XNO3_aer_X_INI] NO2NO3_X_INI -> HNO3_X_INI 
+ [usr_NO2XNO3_aer_X_CH4] NO2NO3_X_CH4 -> HNO3_X_CH4 
+ [usr_NO2XNO3_aer_X_XTR] NO2NO3_X_XTR -> HNO3_X_XTR 
+ [usr_NO2XNO3_aer_X_ANT] NO2NO3_X_ANT -> HNO3_X_ANT 
+ [usr_NO2XNO3_aer_X_BMB] NO2NO3_X_BMB -> HNO3_X_BMB 
+ [usr_NO2XNO3_aer_X_BIO] NO2NO3_X_BIO -> HNO3_X_BIO 
+ [usr_XNO3_aer_X_STR] NO3_X_STR -> HNO3_X_STR 
+ [usr_XNO3_aer_X_INI] NO3_X_INI -> HNO3_X_INI 
+ [usr_XNO3_aer_X_CH4] NO3_X_CH4 -> HNO3_X_CH4 
+ [usr_XNO3_aer_X_XTR] NO3_X_XTR -> HNO3_X_XTR 
+ [usr_XNO3_aer_X_ANT] NO3_X_ANT -> HNO3_X_ANT 
+ [usr_XNO3_aer_X_BMB] NO3_X_BMB -> HNO3_X_BMB 
+ [usr_XNO3_aer_X_BIO] NO3_X_BIO -> HNO3_X_BIO 
+ [usr_XNO2_aer_X_STR] NO2_X_STR -> 0.5 * HNO3_X_STR 
+ [usr_XNO2_aer_X_INI] NO2_X_INI -> 0.5 * HNO3_X_INI 
+ [usr_XNO2_aer_X_CH4] NO2_X_CH4 -> 0.5 * HNO3_X_CH4 
+ [usr_XNO2_aer_X_XTR] NO2_X_XTR -> 0.5 * HNO3_X_XTR 
+ [usr_XNO2_aer_X_ANT] NO2_X_ANT -> 0.5 * HNO3_X_ANT 
+ [usr_XNO2_aer_X_BMB] NO2_X_BMB -> 0.5 * HNO3_X_BMB 
+ [usr_XNO2_aer_X_BIO] NO2_X_BIO -> 0.5 * HNO3_X_BIO 
+ CH4 + O1D_X_STR -> CH4 ; 1.5e-10 
+ CH4 + O1D_X_INI -> CH4 ; 1.5e-10 
+ CH4 + O1D_X_CH4 -> CH4 ; 1.5e-10 
+ CH4 + O1D_X_XTR -> CH4 ; 1.5e-10 
+ CH4 + O1D_X_ANT -> CH4 ; 1.5e-10 
+ CH4 + O1D_X_BMB -> CH4 ; 1.5e-10 
+ CH4 + O1D_X_BIO -> CH4 ; 1.5e-10 
+ CH2O + NO3_X_STR -> CH2O + HNO3_X_STR ; 6.0e-13, -2058 
+ CH2O + NO3_X_INI -> CH2O + HNO3_X_INI ; 6.0e-13, -2058 
+ CH2O + NO3_X_CH4 -> CH2O + HNO3_X_CH4 ; 6.0e-13, -2058 
+ CH2O + NO3_X_XTR -> CH2O + HNO3_X_XTR ; 6.0e-13, -2058 
+ CH2O + NO3_X_ANT -> CH2O + HNO3_X_ANT ; 6.0e-13, -2058 
+ CH2O + NO3_X_BMB -> CH2O + HNO3_X_BMB ; 6.0e-13, -2058 
+ CH2O + NO3_X_BIO -> CH2O + HNO3_X_BIO ; 6.0e-13, -2058 
+ O3_X_STR + C2H4 -> C2H4 ; 1.2e-14, -2630 
+ O3_X_INI + C2H4 -> C2H4 ; 1.2e-14, -2630 
+ O3_X_CH4 + C2H4 -> C2H4 ; 1.2e-14, -2630 
+ O3_X_XTR + C2H4 -> C2H4 ; 1.2e-14, -2630 
+ O3_X_ANT + C2H4 -> C2H4 ; 1.2e-14, -2630 
+ O3_X_BMB + C2H4 -> C2H4 ; 1.2e-14, -2630 
+ O3_X_BIO + C2H4 -> C2H4 ; 1.2e-14, -2630 
+ C3H6 + O3_X_STR -> C3H6 ; 6.5e-15, -1900 
+ C3H6 + O3_X_INI -> C3H6 ; 6.5e-15, -1900 
+ C3H6 + O3_X_CH4 -> C3H6 ; 6.5e-15, -1900 
+ C3H6 + O3_X_XTR -> C3H6 ; 6.5e-15, -1900 
+ C3H6 + O3_X_ANT -> C3H6 ; 6.5e-15, -1900 
+ C3H6 + O3_X_BMB -> C3H6 ; 6.5e-15, -1900 
+ C3H6 + O3_X_BIO -> C3H6 ; 6.5e-15, -1900 
+ C3H6 + NO3_X_STR -> ONIT_X_STR + C3H6 ; 4.6e-13,-1156 
+ C3H6 + NO3_X_INI -> ONIT_X_INI + C3H6 ; 4.6e-13,-1156 
+ C3H6 + NO3_X_CH4 -> ONIT_X_CH4 + C3H6 ; 4.6e-13,-1156 
+ C3H6 + NO3_X_XTR -> ONIT_X_XTR + C3H6 ; 4.6e-13,-1156 
+ C3H6 + NO3_X_ANT -> ONIT_X_ANT + C3H6 ; 4.6e-13,-1156 
+ C3H6 + NO3_X_BMB -> ONIT_X_BMB + C3H6 ; 4.6e-13,-1156 
+ C3H6 + NO3_X_BIO -> ONIT_X_BIO + C3H6 ; 4.6e-13,-1156 
+ CH3CHO + NO3_X_STR -> CH3CHO + HNO3_X_STR ; 1.4e-12, -1900 
+ CH3CHO + NO3_X_INI -> CH3CHO + HNO3_X_INI ; 1.4e-12, -1900 
+ CH3CHO + NO3_X_CH4 -> CH3CHO + HNO3_X_CH4 ; 1.4e-12, -1900 
+ CH3CHO + NO3_X_XTR -> CH3CHO + HNO3_X_XTR ; 1.4e-12, -1900 
+ CH3CHO + NO3_X_ANT -> CH3CHO + HNO3_X_ANT ; 1.4e-12, -1900 
+ CH3CHO + NO3_X_BMB -> CH3CHO + HNO3_X_BMB ; 1.4e-12, -1900 
+ CH3CHO + NO3_X_BIO -> CH3CHO + HNO3_X_BIO ; 1.4e-12, -1900 
+ CH3CO3 + NO2_X_STR + M -> PAN_X_STR + CH3CO3 + M ; 8.5e-29,6.5, 1.1e-11,1., .6 
+ CH3CO3 + NO2_X_INI + M -> PAN_X_INI + CH3CO3 + M ; 8.5e-29,6.5, 1.1e-11,1., .6 
+ CH3CO3 + NO2_X_CH4 + M -> PAN_X_CH4 + CH3CO3 + M ; 8.5e-29,6.5, 1.1e-11,1., .6 
+ CH3CO3 + NO2_X_XTR + M -> PAN_X_XTR + CH3CO3 + M ; 8.5e-29,6.5, 1.1e-11,1., .6 
+ CH3CO3 + NO2_X_ANT + M -> PAN_X_ANT + CH3CO3 + M ; 8.5e-29,6.5, 1.1e-11,1., .6 
+ CH3CO3 + NO2_X_BMB + M -> PAN_X_BMB + CH3CO3 + M ; 8.5e-29,6.5, 1.1e-11,1., .6 
+ CH3CO3 + NO2_X_BIO + M -> PAN_X_BIO + CH3CO3 + M ; 8.5e-29,6.5, 1.1e-11,1., .6 
+ [usr_XPAN_M_X_STR] PAN_X_STR + M -> NO2_X_STR + M 
+ [usr_XPAN_M_X_INI] PAN_X_INI + M -> NO2_X_INI + M 
+ [usr_XPAN_M_X_CH4] PAN_X_CH4 + M -> NO2_X_CH4 + M 
+ [usr_XPAN_M_X_XTR] PAN_X_XTR + M -> NO2_X_XTR + M 
+ [usr_XPAN_M_X_ANT] PAN_X_ANT + M -> NO2_X_ANT + M 
+ [usr_XPAN_M_X_BMB] PAN_X_BMB + M -> NO2_X_BMB + M 
+ [usr_XPAN_M_X_BIO] PAN_X_BIO + M -> NO2_X_BIO + M 
+ ONIT_X_STR + OH -> NO2_X_STR + OH ; 6.8e-13 
+ ONIT_X_INI + OH -> NO2_X_INI + OH ; 6.8e-13 
+ ONIT_X_CH4 + OH -> NO2_X_CH4 + OH ; 6.8e-13 
+ ONIT_X_XTR + OH -> NO2_X_XTR + OH ; 6.8e-13 
+ ONIT_X_ANT + OH -> NO2_X_ANT + OH ; 6.8e-13 
+ ONIT_X_BMB + OH -> NO2_X_BMB + OH ; 6.8e-13 
+ ONIT_X_BIO + OH -> NO2_X_BIO + OH ; 6.8e-13 
+ XOH + NO2_X_STR -> XOH + .7 * NO2_X_STR ; 1.e-11 
+ XOH + NO2_X_INI -> XOH + .7 * NO2_X_INI ; 1.e-11 
+ XOH + NO2_X_CH4 -> XOH + .7 * NO2_X_CH4 ; 1.e-11 
+ XOH + NO2_X_XTR -> XOH + .7 * NO2_X_XTR ; 1.e-11 
+ XOH + NO2_X_ANT -> XOH + .7 * NO2_X_ANT ; 1.e-11 
+ XOH + NO2_X_BMB -> XOH + .7 * NO2_X_BMB ; 1.e-11 
+ XOH + NO2_X_BIO -> XOH + .7 * NO2_X_BIO ; 1.e-11 
+ ISOP + O3_X_STR -> ISOP + .1 * O3_X_STR ; 1.05e-14, -2000 
+ ISOP + O3_X_INI -> ISOP + .1 * O3_X_INI ; 1.05e-14, -2000 
+ ISOP + O3_X_CH4 -> ISOP + .1 * O3_X_CH4 ; 1.05e-14, -2000 
+ ISOP + O3_X_XTR -> ISOP + .1 * O3_X_XTR ; 1.05e-14, -2000 
+ ISOP + O3_X_ANT -> ISOP + .1 * O3_X_ANT ; 1.05e-14, -2000 
+ ISOP + O3_X_BMB -> ISOP + .1 * O3_X_BMB ; 1.05e-14, -2000 
+ ISOP + O3_X_BIO -> ISOP + .1 * O3_X_BIO ; 1.05e-14, -2000 
+ ISOPO2 + NO3_X_STR -> ISOPO2 + NO2_X_STR ; 2.4e-12 
+ ISOPO2 + NO3_X_INI -> ISOPO2 + NO2_X_INI ; 2.4e-12 
+ ISOPO2 + NO3_X_CH4 -> ISOPO2 + NO2_X_CH4 ; 2.4e-12 
+ ISOPO2 + NO3_X_XTR -> ISOPO2 + NO2_X_XTR ; 2.4e-12 
+ ISOPO2 + NO3_X_ANT -> ISOPO2 + NO2_X_ANT ; 2.4e-12 
+ ISOPO2 + NO3_X_BMB -> ISOPO2 + NO2_X_BMB ; 2.4e-12 
+ ISOPO2 + NO3_X_BIO -> ISOPO2 + NO2_X_BIO ; 2.4e-12 
+ MVK + O3_X_STR -> MVK + .2 * O3_X_STR ; 7.52e-16,-1521 
+ MVK + O3_X_INI -> MVK + .2 * O3_X_INI ; 7.52e-16,-1521 
+ MVK + O3_X_CH4 -> MVK + .2 * O3_X_CH4 ; 7.52e-16,-1521 
+ MVK + O3_X_XTR -> MVK + .2 * O3_X_XTR ; 7.52e-16,-1521 
+ MVK + O3_X_ANT -> MVK + .2 * O3_X_ANT ; 7.52e-16,-1521 
+ MVK + O3_X_BMB -> MVK + .2 * O3_X_BMB ; 7.52e-16,-1521 
+ MVK + O3_X_BIO -> MVK + .2 * O3_X_BIO ; 7.52e-16,-1521 
+ MACR + O3_X_STR -> MACR + .2 * O3_X_STR ; 4.4e-15, -2500 
+ MACR + O3_X_INI -> MACR + .2 * O3_X_INI ; 4.4e-15, -2500 
+ MACR + O3_X_CH4 -> MACR + .2 * O3_X_CH4 ; 4.4e-15, -2500 
+ MACR + O3_X_XTR -> MACR + .2 * O3_X_XTR ; 4.4e-15, -2500 
+ MACR + O3_X_ANT -> MACR + .2 * O3_X_ANT ; 4.4e-15, -2500 
+ MACR + O3_X_BMB -> MACR + .2 * O3_X_BMB ; 4.4e-15, -2500 
+ MACR + O3_X_BIO -> MACR + .2 * O3_X_BIO ; 4.4e-15, -2500 
+ MACRO2 + NO3_X_STR -> NO2_X_STR + MACRO2 ; 2.4e-12 
+ MACRO2 + NO3_X_INI -> NO2_X_INI + MACRO2 ; 2.4e-12 
+ MACRO2 + NO3_X_CH4 -> NO2_X_CH4 + MACRO2 ; 2.4e-12 
+ MACRO2 + NO3_X_XTR -> NO2_X_XTR + MACRO2 ; 2.4e-12 
+ MACRO2 + NO3_X_ANT -> NO2_X_ANT + MACRO2 ; 2.4e-12 
+ MACRO2 + NO3_X_BMB -> NO2_X_BMB + MACRO2 ; 2.4e-12 
+ MACRO2 + NO3_X_BIO -> NO2_X_BIO + MACRO2 ; 2.4e-12 
+ MCO3 + NO3_X_STR -> NO2_X_STR + MCO3 ; 5.e-12 
+ MCO3 + NO3_X_INI -> NO2_X_INI + MCO3 ; 5.e-12 
+ MCO3 + NO3_X_CH4 -> NO2_X_CH4 + MCO3 ; 5.e-12 
+ MCO3 + NO3_X_XTR -> NO2_X_XTR + MCO3 ; 5.e-12 
+ MCO3 + NO3_X_ANT -> NO2_X_ANT + MCO3 ; 5.e-12 
+ MCO3 + NO3_X_BMB -> NO2_X_BMB + MCO3 ; 5.e-12 
+ MCO3 + NO3_X_BIO -> NO2_X_BIO + MCO3 ; 5.e-12 
+ [usr_MCO3_XNO2_X_STR] MCO3 + NO2_X_STR + M -> MPAN_X_STR + M + MCO3 
+ [usr_MCO3_XNO2_X_INI] MCO3 + NO2_X_INI + M -> MPAN_X_INI + M + MCO3 
+ [usr_MCO3_XNO2_X_CH4] MCO3 + NO2_X_CH4 + M -> MPAN_X_CH4 + M + MCO3 
+ [usr_MCO3_XNO2_X_XTR] MCO3 + NO2_X_XTR + M -> MPAN_X_XTR + M + MCO3 
+ [usr_MCO3_XNO2_X_ANT] MCO3 + NO2_X_ANT + M -> MPAN_X_ANT + M + MCO3 
+ [usr_MCO3_XNO2_X_BMB] MCO3 + NO2_X_BMB + M -> MPAN_X_BMB + M + MCO3 
+ [usr_MCO3_XNO2_X_BIO] MCO3 + NO2_X_BIO + M -> MPAN_X_BIO + M + MCO3 
+ [usr_XMPAN_M_X_STR] MPAN_X_STR + M -> NO2_X_STR + M 
+ [usr_XMPAN_M_X_INI] MPAN_X_INI + M -> NO2_X_INI + M 
+ [usr_XMPAN_M_X_CH4] MPAN_X_CH4 + M -> NO2_X_CH4 + M 
+ [usr_XMPAN_M_X_XTR] MPAN_X_XTR + M -> NO2_X_XTR + M 
+ [usr_XMPAN_M_X_ANT] MPAN_X_ANT + M -> NO2_X_ANT + M 
+ [usr_XMPAN_M_X_BMB] MPAN_X_BMB + M -> NO2_X_BMB + M 
+ [usr_XMPAN_M_X_BIO] MPAN_X_BIO + M -> NO2_X_BIO + M 
+ C10H16 + O3_X_STR -> C10H16 ; 1.e-15, -732 
+ C10H16 + O3_X_INI -> C10H16 ; 1.e-15, -732 
+ C10H16 + O3_X_CH4 -> C10H16 ; 1.e-15, -732 
+ C10H16 + O3_X_XTR -> C10H16 ; 1.e-15, -732 
+ C10H16 + O3_X_ANT -> C10H16 ; 1.e-15, -732 
+ C10H16 + O3_X_BMB -> C10H16 ; 1.e-15, -732 
+ C10H16 + O3_X_BIO -> C10H16 ; 1.e-15, -732 
+ C10H16 + NO3_X_STR -> C10H16 + NO2_X_STR ; 1.2e-12, 490 
+ C10H16 + NO3_X_INI -> C10H16 + NO2_X_INI ; 1.2e-12, 490 
+ C10H16 + NO3_X_CH4 -> C10H16 + NO2_X_CH4 ; 1.2e-12, 490 
+ C10H16 + NO3_X_XTR -> C10H16 + NO2_X_XTR ; 1.2e-12, 490 
+ C10H16 + NO3_X_ANT -> C10H16 + NO2_X_ANT ; 1.2e-12, 490 
+ C10H16 + NO3_X_BMB -> C10H16 + NO2_X_BMB ; 1.2e-12, 490 
+ C10H16 + NO3_X_BIO -> C10H16 + NO2_X_BIO ; 1.2e-12, 490 
+ ISOP + NO3_X_STR -> ISOPNO3_X_STR + ISOP ; 3.03e-12,-446 
+ ISOP + NO3_X_INI -> ISOPNO3_X_INI + ISOP ; 3.03e-12,-446 
+ ISOP + NO3_X_CH4 -> ISOPNO3_X_CH4 + ISOP ; 3.03e-12,-446 
+ ISOP + NO3_X_XTR -> ISOPNO3_X_XTR + ISOP ; 3.03e-12,-446 
+ ISOP + NO3_X_ANT -> ISOPNO3_X_ANT + ISOP ; 3.03e-12,-446 
+ ISOP + NO3_X_BMB -> ISOPNO3_X_BMB + ISOP ; 3.03e-12,-446 
+ ISOP + NO3_X_BIO -> ISOPNO3_X_BIO + ISOP ; 3.03e-12,-446 
+ ISOPNO3_X_STR + NO -> .794 * ONITR_X_STR + .206 * NO2_X_STR + NO ; 2.7e-12, 360 
+ ISOPNO3_X_INI + NO -> .794 * ONITR_X_INI + .206 * NO2_X_INI + NO ; 2.7e-12, 360 
+ ISOPNO3_X_CH4 + NO -> .794 * ONITR_X_CH4 + .206 * NO2_X_CH4 + NO ; 2.7e-12, 360 
+ ISOPNO3_X_XTR + NO -> .794 * ONITR_X_XTR + .206 * NO2_X_XTR + NO ; 2.7e-12, 360 
+ ISOPNO3_X_ANT + NO -> .794 * ONITR_X_ANT + .206 * NO2_X_ANT + NO ; 2.7e-12, 360 
+ ISOPNO3_X_BMB + NO -> .794 * ONITR_X_BMB + .206 * NO2_X_BMB + NO ; 2.7e-12, 360 
+ ISOPNO3_X_BIO + NO -> .794 * ONITR_X_BIO + .206 * NO2_X_BIO + NO ; 2.7e-12, 360 
+ ISOPNO3_X_STR + NO3 -> .794 * ONITR_X_STR + .206 * NO2_X_STR + NO3 ; 2.4e-12 
+ ISOPNO3_X_INI + NO3 -> .794 * ONITR_X_INI + .206 * NO2_X_INI + NO3 ; 2.4e-12 
+ ISOPNO3_X_CH4 + NO3 -> .794 * ONITR_X_CH4 + .206 * NO2_X_CH4 + NO3 ; 2.4e-12 
+ ISOPNO3_X_XTR + NO3 -> .794 * ONITR_X_XTR + .206 * NO2_X_XTR + NO3 ; 2.4e-12 
+ ISOPNO3_X_ANT + NO3 -> .794 * ONITR_X_ANT + .206 * NO2_X_ANT + NO3 ; 2.4e-12 
+ ISOPNO3_X_BMB + NO3 -> .794 * ONITR_X_BMB + .206 * NO2_X_BMB + NO3 ; 2.4e-12 
+ ISOPNO3_X_BIO + NO3 -> .794 * ONITR_X_BIO + .206 * NO2_X_BIO + NO3 ; 2.4e-12 
+ ISOPNO3 + NO3_X_STR -> 1.00 * NO2_X_STR + ISOPNO3 ; 2.4e-12 
+ ISOPNO3 + NO3_X_INI -> 1.00 * NO2_X_INI + ISOPNO3 ; 2.4e-12 
+ ISOPNO3 + NO3_X_CH4 -> 1.00 * NO2_X_CH4 + ISOPNO3 ; 2.4e-12 
+ ISOPNO3 + NO3_X_XTR -> 1.00 * NO2_X_XTR + ISOPNO3 ; 2.4e-12 
+ ISOPNO3 + NO3_X_ANT -> 1.00 * NO2_X_ANT + ISOPNO3 ; 2.4e-12 
+ ISOPNO3 + NO3_X_BMB -> 1.00 * NO2_X_BMB + ISOPNO3 ; 2.4e-12 
+ ISOPNO3 + NO3_X_BIO -> 1.00 * NO2_X_BIO + ISOPNO3 ; 2.4e-12 
+ ISOPNO3_X_STR + HO2 -> .206 * NO2_X_STR + .794 * ONITR_X_STR + HO2 ; 8.e-13, 700 
+ ISOPNO3_X_INI + HO2 -> .206 * NO2_X_INI + .794 * ONITR_X_INI + HO2 ; 8.e-13, 700 
+ ISOPNO3_X_CH4 + HO2 -> .206 * NO2_X_CH4 + .794 * ONITR_X_CH4 + HO2 ; 8.e-13, 700 
+ ISOPNO3_X_XTR + HO2 -> .206 * NO2_X_XTR + .794 * ONITR_X_XTR + HO2 ; 8.e-13, 700 
+ ISOPNO3_X_ANT + HO2 -> .206 * NO2_X_ANT + .794 * ONITR_X_ANT + HO2 ; 8.e-13, 700 
+ ISOPNO3_X_BMB + HO2 -> .206 * NO2_X_BMB + .794 * ONITR_X_BMB + HO2 ; 8.e-13, 700 
+ ISOPNO3_X_BIO + HO2 -> .206 * NO2_X_BIO + .794 * ONITR_X_BIO + HO2 ; 8.e-13, 700 
+ CH3COCHO + NO3_X_STR -> HNO3_X_STR + CH3COCHO ; 1.4e-12, -1860 
+ CH3COCHO + NO3_X_INI -> HNO3_X_INI + CH3COCHO ; 1.4e-12, -1860 
+ CH3COCHO + NO3_X_CH4 -> HNO3_X_CH4 + CH3COCHO ; 1.4e-12, -1860 
+ CH3COCHO + NO3_X_XTR -> HNO3_X_XTR + CH3COCHO ; 1.4e-12, -1860 
+ CH3COCHO + NO3_X_ANT -> HNO3_X_ANT + CH3COCHO ; 1.4e-12, -1860 
+ CH3COCHO + NO3_X_BMB -> HNO3_X_BMB + CH3COCHO ; 1.4e-12, -1860 
+ CH3COCHO + NO3_X_BIO -> HNO3_X_BIO + CH3COCHO ; 1.4e-12, -1860 
+ ONITR_X_STR + OH -> OH + .4 * NO2_X_STR ; 4.5e-11 
+ ONITR_X_INI + OH -> OH + .4 * NO2_X_INI ; 4.5e-11 
+ ONITR_X_CH4 + OH -> OH + .4 * NO2_X_CH4 ; 4.5e-11 
+ ONITR_X_XTR + OH -> OH + .4 * NO2_X_XTR ; 4.5e-11 
+ ONITR_X_ANT + OH -> OH + .4 * NO2_X_ANT ; 4.5e-11 
+ ONITR_X_BMB + OH -> OH + .4 * NO2_X_BMB ; 4.5e-11 
+ ONITR_X_BIO + OH -> OH + .4 * NO2_X_BIO ; 4.5e-11 
+ ONITR_X_STR + NO3 -> .5 * NO2_X_STR + NO3 ; 1.4e-12, -1860 
+ ONITR_X_INI + NO3 -> .5 * NO2_X_INI + NO3 ; 1.4e-12, -1860 
+ ONITR_X_CH4 + NO3 -> .5 * NO2_X_CH4 + NO3 ; 1.4e-12, -1860 
+ ONITR_X_XTR + NO3 -> .5 * NO2_X_XTR + NO3 ; 1.4e-12, -1860 
+ ONITR_X_ANT + NO3 -> .5 * NO2_X_ANT + NO3 ; 1.4e-12, -1860 
+ ONITR_X_BMB + NO3 -> .5 * NO2_X_BMB + NO3 ; 1.4e-12, -1860 
+ ONITR_X_BIO + NO3 -> .5 * NO2_X_BIO + NO3 ; 1.4e-12, -1860 
+ ONITR + NO3_X_STR -> .5 * NO2_X_STR + ONITR ; 1.4e-12, -1860 
+ ONITR + NO3_X_INI -> .5 * NO2_X_INI + ONITR ; 1.4e-12, -1860 
+ ONITR + NO3_X_CH4 -> .5 * NO2_X_CH4 + ONITR ; 1.4e-12, -1860 
+ ONITR + NO3_X_XTR -> .5 * NO2_X_XTR + ONITR ; 1.4e-12, -1860 
+ ONITR + NO3_X_ANT -> .5 * NO2_X_ANT + ONITR ; 1.4e-12, -1860 
+ ONITR + NO3_X_BMB -> .5 * NO2_X_BMB + ONITR ; 1.4e-12, -1860 
+ ONITR + NO3_X_BIO -> .5 * NO2_X_BIO + ONITR ; 1.4e-12, -1860 
+ XO2 + NO3_X_STR -> NO2_X_STR + XO2 ; 2.4e-12 
+ XO2 + NO3_X_INI -> NO2_X_INI + XO2 ; 2.4e-12 
+ XO2 + NO3_X_CH4 -> NO2_X_CH4 + XO2 ; 2.4e-12 
+ XO2 + NO3_X_XTR -> NO2_X_XTR + XO2 ; 2.4e-12 
+ XO2 + NO3_X_ANT -> NO2_X_ANT + XO2 ; 2.4e-12 
+ XO2 + NO3_X_BMB -> NO2_X_BMB + XO2 ; 2.4e-12 
+ XO2 + NO3_X_BIO -> NO2_X_BIO + XO2 ; 2.4e-12 
+ OH + MPAN_X_STR + M -> .5 * NO3_X_STR + OH + M ; 8.e-27,3.5,3.e-11,0.,.5 
+ OH + MPAN_X_INI + M -> .5 * NO3_X_INI + OH + M ; 8.e-27,3.5,3.e-11,0.,.5 
+ OH + MPAN_X_CH4 + M -> .5 * NO3_X_CH4 + OH + M ; 8.e-27,3.5,3.e-11,0.,.5 
+ OH + MPAN_X_XTR + M -> .5 * NO3_X_XTR + OH + M ; 8.e-27,3.5,3.e-11,0.,.5 
+ OH + MPAN_X_ANT + M -> .5 * NO3_X_ANT + OH + M ; 8.e-27,3.5,3.e-11,0.,.5 
+ OH + MPAN_X_BMB + M -> .5 * NO3_X_BMB + OH + M ; 8.e-27,3.5,3.e-11,0.,.5 
+ OH + MPAN_X_BIO + M -> .5 * NO3_X_BIO + OH + M ; 8.e-27,3.5,3.e-11,0.,.5 
+ OH + PAN_X_STR -> NO3_X_STR + OH ; 4.e-14 
+ OH + PAN_X_INI -> NO3_X_INI + OH ; 4.e-14 
+ OH + PAN_X_CH4 -> NO3_X_CH4 + OH ; 4.e-14 
+ OH + PAN_X_XTR -> NO3_X_XTR + OH ; 4.e-14 
+ OH + PAN_X_ANT -> NO3_X_ANT + OH ; 4.e-14 
+ OH + PAN_X_BMB -> NO3_X_BMB + OH ; 4.e-14 
+ OH + PAN_X_BIO -> NO3_X_BIO + OH ; 4.e-14 
+ DMS + NO3_X_STR -> DMS + HNO3_X_STR ; 1.9e-13, 520. 
+ DMS + NO3_X_INI -> DMS + HNO3_X_INI ; 1.9e-13, 520. 
+ DMS + NO3_X_CH4 -> DMS + HNO3_X_CH4 ; 1.9e-13, 520. 
+ DMS + NO3_X_XTR -> DMS + HNO3_X_XTR ; 1.9e-13, 520. 
+ DMS + NO3_X_ANT -> DMS + HNO3_X_ANT ; 1.9e-13, 520. 
+ DMS + NO3_X_BMB -> DMS + HNO3_X_BMB ; 1.9e-13, 520. 
+ DMS + NO3_X_BIO -> DMS + HNO3_X_BIO ; 1.9e-13, 520. 
+ [usr_HO2NO2_M_X_STR] NO2HO2_X_STR + M -> HO2_X_STR + M 
+ [usr_HO2NO2_M_X_INI] NO2HO2_X_INI + M -> HO2_X_INI + M 
+ [usr_HO2NO2_M_X_CH4] NO2HO2_X_CH4 + M -> HO2_X_CH4 + M 
+ [usr_HO2NO2_M_X_XTR] NO2HO2_X_XTR + M -> HO2_X_XTR + M 
+ [usr_HO2NO2_M_X_ANT] NO2HO2_X_ANT + M -> HO2_X_ANT + M 
+ [usr_HO2NO2_M_X_BMB] NO2HO2_X_BMB + M -> HO2_X_BMB + M 
+ [usr_HO2NO2_M_X_BIO] NO2HO2_X_BIO + M -> HO2_X_BIO + M 
+ HO2_X_STR + O -> O ; 3e-11, 200 
+ HO2_X_INI + O -> O ; 3e-11, 200 
+ HO2_X_CH4 + O -> O ; 3e-11, 200 
+ HO2_X_XTR + O -> O ; 3e-11, 200 
+ HO2_X_ANT + O -> O ; 3e-11, 200 
+ HO2_X_BMB + O -> O ; 3e-11, 200 
+ HO2_X_BIO + O -> O ; 3e-11, 200 
+ [ox_l3_X_STR] HO2_X_STR + O3 -> O3 ; 1.e-14, -490 
+ [ox_l3_X_INI] HO2_X_INI + O3 -> O3 ; 1.e-14, -490 
+ [ox_l3_X_CH4] HO2_X_CH4 + O3 -> O3 ; 1.e-14, -490 
+ [ox_l3_X_XTR] HO2_X_XTR + O3 -> O3 ; 1.e-14, -490 
+ [ox_l3_X_ANT] HO2_X_ANT + O3 -> O3 ; 1.e-14, -490 
+ [ox_l3_X_BMB] HO2_X_BMB + O3 -> O3 ; 1.e-14, -490 
+ [ox_l3_X_BIO] HO2_X_BIO + O3 -> O3 ; 1.e-14, -490 
+ [usr_HO2_HO2_X_STR] HO2_X_STR + HO2 -> HO2 
+ [usr_HO2_HO2_X_INI] HO2_X_INI + HO2 -> HO2 
+ [usr_HO2_HO2_X_CH4] HO2_X_CH4 + HO2 -> HO2 
+ [usr_HO2_HO2_X_XTR] HO2_X_XTR + HO2 -> HO2 
+ [usr_HO2_HO2_X_ANT] HO2_X_ANT + HO2 -> HO2 
+ [usr_HO2_HO2_X_BMB] HO2_X_BMB + HO2 -> HO2 
+ [usr_HO2_HO2_X_BIO] HO2_X_BIO + HO2 -> HO2 
+ OH + HO2_X_STR -> OH ; 4.8e-11, 250 
+ OH + HO2_X_INI -> OH ; 4.8e-11, 250 
+ OH + HO2_X_CH4 -> OH ; 4.8e-11, 250 
+ OH + HO2_X_XTR -> OH ; 4.8e-11, 250 
+ OH + HO2_X_ANT -> OH ; 4.8e-11, 250 
+ OH + HO2_X_BMB -> OH ; 4.8e-11, 250 
+ OH + HO2_X_BIO -> OH ; 4.8e-11, 250 
+ [ox_p1_X_STR] NO + HO2_X_STR -> NO2_X_STR + NO ; 3.5e-12, 250 
+ [ox_p1_X_INI] NO + HO2_X_INI -> NO2_X_INI + NO ; 3.5e-12, 250 
+ [ox_p1_X_CH4] NO + HO2_X_CH4 -> NO2_X_CH4 + NO ; 3.5e-12, 250 
+ [ox_p1_X_XTR] NO + HO2_X_XTR -> NO2_X_XTR + NO ; 3.5e-12, 250 
+ [ox_p1_X_ANT] NO + HO2_X_ANT -> NO2_X_ANT + NO ; 3.5e-12, 250 
+ [ox_p1_X_BMB] NO + HO2_X_BMB -> NO2_X_BMB + NO ; 3.5e-12, 250 
+ [ox_p1_X_BIO] NO + HO2_X_BIO -> NO2_X_BIO + NO ; 3.5e-12, 250 
+ NO3 + HO2_X_STR -> NO3 ; 3.5e-12 
+ NO3 + HO2_X_INI -> NO3 ; 3.5e-12 
+ NO3 + HO2_X_CH4 -> NO3 ; 3.5e-12 
+ NO3 + HO2_X_XTR -> NO3 ; 3.5e-12 
+ NO3 + HO2_X_ANT -> NO3 ; 3.5e-12 
+ NO3 + HO2_X_BMB -> NO3 ; 3.5e-12 
+ NO3 + HO2_X_BIO -> NO3 ; 3.5e-12 
+ [tag_NO2_HO2_X_STR] NO2 + HO2_X_STR + M -> NO2HO2_X_STR + M + NO2 ; 2.0e-31,3.4, 2.9e-12,1.1, .6 
+ [tag_NO2_HO2_X_INI] NO2 + HO2_X_INI + M -> NO2HO2_X_INI + M + NO2 ; 2.0e-31,3.4, 2.9e-12,1.1, .6 
+ [tag_NO2_HO2_X_CH4] NO2 + HO2_X_CH4 + M -> NO2HO2_X_CH4 + M + NO2 ; 2.0e-31,3.4, 2.9e-12,1.1, .6 
+ [tag_NO2_HO2_X_XTR] NO2 + HO2_X_XTR + M -> NO2HO2_X_XTR + M + NO2 ; 2.0e-31,3.4, 2.9e-12,1.1, .6 
+ [tag_NO2_HO2_X_ANT] NO2 + HO2_X_ANT + M -> NO2HO2_X_ANT + M + NO2 ; 2.0e-31,3.4, 2.9e-12,1.1, .6 
+ [tag_NO2_HO2_X_BMB] NO2 + HO2_X_BMB + M -> NO2HO2_X_BMB + M + NO2 ; 2.0e-31,3.4, 2.9e-12,1.1, .6 
+ [tag_NO2_HO2_X_BIO] NO2 + HO2_X_BIO + M -> NO2HO2_X_BIO + M + NO2 ; 2.0e-31,3.4, 2.9e-12,1.1, .6 
+ CH3O2 + HO2_X_STR -> CH3O2 ; 4.1e-13, 750 
+ CH3O2 + HO2_X_INI -> CH3O2 ; 4.1e-13, 750 
+ CH3O2 + HO2_X_CH4 -> CH3O2 ; 4.1e-13, 750 
+ CH3O2 + HO2_X_XTR -> CH3O2 ; 4.1e-13, 750 
+ CH3O2 + HO2_X_ANT -> CH3O2 ; 4.1e-13, 750 
+ CH3O2 + HO2_X_BMB -> CH3O2 ; 4.1e-13, 750 
+ CH3O2 + HO2_X_BIO -> CH3O2 ; 4.1e-13, 750 
+ CH2O + HO2_X_STR -> CH2O ; 9.7e-15, 625 
+ CH2O + HO2_X_INI -> CH2O ; 9.7e-15, 625 
+ CH2O + HO2_X_CH4 -> CH2O ; 9.7e-15, 625 
+ CH2O + HO2_X_XTR -> CH2O ; 9.7e-15, 625 
+ CH2O + HO2_X_ANT -> CH2O ; 9.7e-15, 625 
+ CH2O + HO2_X_BMB -> CH2O ; 9.7e-15, 625 
+ CH2O + HO2_X_BIO -> CH2O ; 9.7e-15, 625 
+ HOCH2OO + HO2_X_STR -> HOCH2OO ; 7.5e-13, 700 
+ HOCH2OO + HO2_X_INI -> HOCH2OO ; 7.5e-13, 700 
+ HOCH2OO + HO2_X_CH4 -> HOCH2OO ; 7.5e-13, 700 
+ HOCH2OO + HO2_X_XTR -> HOCH2OO ; 7.5e-13, 700 
+ HOCH2OO + HO2_X_ANT -> HOCH2OO ; 7.5e-13, 700 
+ HOCH2OO + HO2_X_BMB -> HOCH2OO ; 7.5e-13, 700 
+ HOCH2OO + HO2_X_BIO -> HOCH2OO ; 7.5e-13, 700 
+ C2H5O2 + HO2_X_STR -> C2H5O2 ; 7.5e-13, 700 
+ C2H5O2 + HO2_X_INI -> C2H5O2 ; 7.5e-13, 700 
+ C2H5O2 + HO2_X_CH4 -> C2H5O2 ; 7.5e-13, 700 
+ C2H5O2 + HO2_X_XTR -> C2H5O2 ; 7.5e-13, 700 
+ C2H5O2 + HO2_X_ANT -> C2H5O2 ; 7.5e-13, 700 
+ C2H5O2 + HO2_X_BMB -> C2H5O2 ; 7.5e-13, 700 
+ C2H5O2 + HO2_X_BIO -> C2H5O2 ; 7.5e-13, 700 
+ CH3CO3 + HO2_X_STR -> CH3CO3 ; 4.3e-13, 1040 
+ CH3CO3 + HO2_X_INI -> CH3CO3 ; 4.3e-13, 1040 
+ CH3CO3 + HO2_X_CH4 -> CH3CO3 ; 4.3e-13, 1040 
+ CH3CO3 + HO2_X_XTR -> CH3CO3 ; 4.3e-13, 1040 
+ CH3CO3 + HO2_X_ANT -> CH3CO3 ; 4.3e-13, 1040 
+ CH3CO3 + HO2_X_BMB -> CH3CO3 ; 4.3e-13, 1040 
+ CH3CO3 + HO2_X_BIO -> CH3CO3 ; 4.3e-13, 1040 
+ PO2 + HO2_X_STR -> PO2 ; 7.5e-13, 700 
+ PO2 + HO2_X_INI -> PO2 ; 7.5e-13, 700 
+ PO2 + HO2_X_CH4 -> PO2 ; 7.5e-13, 700 
+ PO2 + HO2_X_XTR -> PO2 ; 7.5e-13, 700 
+ PO2 + HO2_X_ANT -> PO2 ; 7.5e-13, 700 
+ PO2 + HO2_X_BMB -> PO2 ; 7.5e-13, 700 
+ PO2 + HO2_X_BIO -> PO2 ; 7.5e-13, 700 
+ C3H7O2 + HO2_X_STR -> C3H7O2 ; 7.5e-13, 700 
+ C3H7O2 + HO2_X_INI -> C3H7O2 ; 7.5e-13, 700 
+ C3H7O2 + HO2_X_CH4 -> C3H7O2 ; 7.5e-13, 700 
+ C3H7O2 + HO2_X_XTR -> C3H7O2 ; 7.5e-13, 700 
+ C3H7O2 + HO2_X_ANT -> C3H7O2 ; 7.5e-13, 700 
+ C3H7O2 + HO2_X_BMB -> C3H7O2 ; 7.5e-13, 700 
+ C3H7O2 + HO2_X_BIO -> C3H7O2 ; 7.5e-13, 700 
+ RO2 + HO2_X_STR -> RO2 ; 8.6e-13, 700 
+ RO2 + HO2_X_INI -> RO2 ; 8.6e-13, 700 
+ RO2 + HO2_X_CH4 -> RO2 ; 8.6e-13, 700 
+ RO2 + HO2_X_XTR -> RO2 ; 8.6e-13, 700 
+ RO2 + HO2_X_ANT -> RO2 ; 8.6e-13, 700 
+ RO2 + HO2_X_BMB -> RO2 ; 8.6e-13, 700 
+ RO2 + HO2_X_BIO -> RO2 ; 8.6e-13, 700 
+ MEKO2 + HO2_X_STR -> MEKO2 ; 7.5e-13, 700 
+ MEKO2 + HO2_X_INI -> MEKO2 ; 7.5e-13, 700 
+ MEKO2 + HO2_X_CH4 -> MEKO2 ; 7.5e-13, 700 
+ MEKO2 + HO2_X_XTR -> MEKO2 ; 7.5e-13, 700 
+ MEKO2 + HO2_X_ANT -> MEKO2 ; 7.5e-13, 700 
+ MEKO2 + HO2_X_BMB -> MEKO2 ; 7.5e-13, 700 
+ MEKO2 + HO2_X_BIO -> MEKO2 ; 7.5e-13, 700 
+ ALKO2 + HO2_X_STR -> ALKO2 ; 7.5e-13, 700 
+ ALKO2 + HO2_X_INI -> ALKO2 ; 7.5e-13, 700 
+ ALKO2 + HO2_X_CH4 -> ALKO2 ; 7.5e-13, 700 
+ ALKO2 + HO2_X_XTR -> ALKO2 ; 7.5e-13, 700 
+ ALKO2 + HO2_X_ANT -> ALKO2 ; 7.5e-13, 700 
+ ALKO2 + HO2_X_BMB -> ALKO2 ; 7.5e-13, 700 
+ ALKO2 + HO2_X_BIO -> ALKO2 ; 7.5e-13, 700 
+ ISOPO2 + HO2_X_STR -> ISOPO2 ; 8.e-13, 700 
+ ISOPO2 + HO2_X_INI -> ISOPO2 ; 8.e-13, 700 
+ ISOPO2 + HO2_X_CH4 -> ISOPO2 ; 8.e-13, 700 
+ ISOPO2 + HO2_X_XTR -> ISOPO2 ; 8.e-13, 700 
+ ISOPO2 + HO2_X_ANT -> ISOPO2 ; 8.e-13, 700 
+ ISOPO2 + HO2_X_BMB -> ISOPO2 ; 8.e-13, 700 
+ ISOPO2 + HO2_X_BIO -> ISOPO2 ; 8.e-13, 700 
+ ISOPNO3 + HO2_X_STR -> ISOPNO3 ; 8.e-13, 700 
+ ISOPNO3 + HO2_X_INI -> ISOPNO3 ; 8.e-13, 700 
+ ISOPNO3 + HO2_X_CH4 -> ISOPNO3 ; 8.e-13, 700 
+ ISOPNO3 + HO2_X_XTR -> ISOPNO3 ; 8.e-13, 700 
+ ISOPNO3 + HO2_X_ANT -> ISOPNO3 ; 8.e-13, 700 
+ ISOPNO3 + HO2_X_BMB -> ISOPNO3 ; 8.e-13, 700 
+ ISOPNO3 + HO2_X_BIO -> ISOPNO3 ; 8.e-13, 700 
+ MACRO2 + HO2_X_STR -> MACRO2 ; 8.e-13, 700 
+ MACRO2 + HO2_X_INI -> MACRO2 ; 8.e-13, 700 
+ MACRO2 + HO2_X_CH4 -> MACRO2 ; 8.e-13, 700 
+ MACRO2 + HO2_X_XTR -> MACRO2 ; 8.e-13, 700 
+ MACRO2 + HO2_X_ANT -> MACRO2 ; 8.e-13, 700 
+ MACRO2 + HO2_X_BMB -> MACRO2 ; 8.e-13, 700 
+ MACRO2 + HO2_X_BIO -> MACRO2 ; 8.e-13, 700 
+ MCO3 + HO2_X_STR -> MCO3 ; 4.30e-13, 1040 
+ MCO3 + HO2_X_INI -> MCO3 ; 4.30e-13, 1040 
+ MCO3 + HO2_X_CH4 -> MCO3 ; 4.30e-13, 1040 
+ MCO3 + HO2_X_XTR -> MCO3 ; 4.30e-13, 1040 
+ MCO3 + HO2_X_ANT -> MCO3 ; 4.30e-13, 1040 
+ MCO3 + HO2_X_BMB -> MCO3 ; 4.30e-13, 1040 
+ MCO3 + HO2_X_BIO -> MCO3 ; 4.30e-13, 1040 
+ XO2 + HO2_X_STR -> XO2 ; 8.e-13, 700 
+ XO2 + HO2_X_INI -> XO2 ; 8.e-13, 700 
+ XO2 + HO2_X_CH4 -> XO2 ; 8.e-13, 700 
+ XO2 + HO2_X_XTR -> XO2 ; 8.e-13, 700 
+ XO2 + HO2_X_ANT -> XO2 ; 8.e-13, 700 
+ XO2 + HO2_X_BMB -> XO2 ; 8.e-13, 700 
+ XO2 + HO2_X_BIO -> XO2 ; 8.e-13, 700 
+ TOLO2 + HO2_X_STR -> TOLO2 ; 7.5e-13, 700 
+ TOLO2 + HO2_X_INI -> TOLO2 ; 7.5e-13, 700 
+ TOLO2 + HO2_X_CH4 -> TOLO2 ; 7.5e-13, 700 
+ TOLO2 + HO2_X_XTR -> TOLO2 ; 7.5e-13, 700 
+ TOLO2 + HO2_X_ANT -> TOLO2 ; 7.5e-13, 700 
+ TOLO2 + HO2_X_BMB -> TOLO2 ; 7.5e-13, 700 
+ TOLO2 + HO2_X_BIO -> TOLO2 ; 7.5e-13, 700 
+ TERPO2 + HO2_X_STR -> TERPO2 ; 7.5e-13, 700 
+ TERPO2 + HO2_X_INI -> TERPO2 ; 7.5e-13, 700 
+ TERPO2 + HO2_X_CH4 -> TERPO2 ; 7.5e-13, 700 
+ TERPO2 + HO2_X_XTR -> TERPO2 ; 7.5e-13, 700 
+ TERPO2 + HO2_X_ANT -> TERPO2 ; 7.5e-13, 700 
+ TERPO2 + HO2_X_BMB -> TERPO2 ; 7.5e-13, 700 
+ TERPO2 + HO2_X_BIO -> TERPO2 ; 7.5e-13, 700 
+ [usr_HO2_aer_X_STR] HO2_X_STR -> dummy 
+ [usr_HO2_aer_X_INI] HO2_X_INI -> dummy 
+ [usr_HO2_aer_X_CH4] HO2_X_CH4 -> dummy 
+ [usr_HO2_aer_X_XTR] HO2_X_XTR -> dummy 
+ [usr_HO2_aer_X_ANT] HO2_X_ANT -> dummy 
+ [usr_HO2_aer_X_BMB] HO2_X_BMB -> dummy 
+ [usr_HO2_aer_X_BIO] HO2_X_BIO -> dummy 
+ NO2HO2_X_STR + OH -> OH ; 1.3e-12, 380 
+ NO2HO2_X_INI + OH -> OH ; 1.3e-12, 380 
+ NO2HO2_X_CH4 + OH -> OH ; 1.3e-12, 380 
+ NO2HO2_X_XTR + OH -> OH ; 1.3e-12, 380 
+ NO2HO2_X_ANT + OH -> OH ; 1.3e-12, 380 
+ NO2HO2_X_BMB + OH -> OH ; 1.3e-12, 380 
+ NO2HO2_X_BIO + OH -> OH ; 1.3e-12, 380 
+ H2O2 + OH -> HO2_X_XTR + H2O2 + OH ; 2.9e-12, -160
+
+ OH + OH -> O_X_XTR + 2 * OH ; 1.8e-12
+
+   End Reactions
+
+   Ext Forcing
+      NO <- dataset
+      CO <- dataset
+      SO2 <- dataset
+      CB1 <- dataset
+      CB2 <- dataset
+   End Ext Forcing
+
+   END CHEMISTRY
+
+   SIMULATION PARAMETERS
+
+     Version Options
+        model   = cam
+        machine = intel
+        architecture = hybrid
+        vec_ftns  = on
+        multitask = on
+        namemod = on
+        modules = on
+     End Version Options
+
+   END SIMULATION PARAMETERS

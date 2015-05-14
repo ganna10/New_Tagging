@@ -1,0 +1,14 @@
+* This file contains extra reactions which produce tagged species
+* All consumption reactions should already be accounted for in the ox_tags file
+
+* Inorganic reactions producing O
+ [jo2_X_STR->,jo2_b] O2 + hv -> 2 * O_X_STR + O2
+ OH + OH -> O_X_XTR + 2 * OH ; 1.8e-12
+
+* Reactions of N2O (important in the stratosphere)
+ [jn2o_X_STR->,jn2o] N2O + hv -> O1D_X_STR + N2O
+ N2O + O1D -> 2*NO_STR + N2O + O1D                                              ; 6.7e-11
+
+* Organic reactions producing ozone
+ MCO3 + HO2 -> .25*O3_X_XTR + MCO3 + HO2      ; 4.30e-13, 1040
+ CH3CO3 + HO2 -> .25*O3_X_XTR + CH3CO3 + HO2            ; 4.3e-13, 1040

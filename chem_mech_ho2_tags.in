@@ -1,0 +1,34 @@
+* Tagged HO2 reactions
+* HO2 Producers
+[jno2ho2_a->,jho2no2_a] NO2HO2_X + hv -> .66 * HO2_X 
+[jno2ho2_b->,jho2no2_b] NO2HO2_X + hv -> .66 * HO2_X 
+[usr_HO2NO2_M] NO2HO2_X + M -> HO2_X + M 
+* HO2 Consumers
+ HO2_X + O -> O ; 3e-11, 200
+[ox_l3] HO2_X + O3 -> O3 ; 1.e-14, -490
+[usr_HO2_HO2] HO2_X + HO2 -> HO2 
+ OH + HO2_X -> OH ; 4.8e-11, 250
+* This is where the tag passes from HO2 to Ox
+[ox_p1] NO + HO2_X -> NO2_X + NO ; 3.5e-12, 250
+ NO3 + HO2_X -> NO3 ; 3.5e-12
+[tag_NO2_HO2] NO2 + HO2_X + M -> NO2HO2_X + M + NO2 ; 2.0e-31,3.4, 2.9e-12,1.1, .6
+ CH3O2 + HO2_X -> CH3O2 ; 4.1e-13, 750
+ CH2O + HO2_X -> CH2O ; 9.7e-15, 625
+ HOCH2OO + HO2_X -> HOCH2OO ; 7.5e-13, 700
+ C2H5O2 + HO2_X -> C2H5O2 ; 7.5e-13, 700
+ CH3CO3 + HO2_X -> CH3CO3 ; 4.3e-13, 1040
+ PO2 + HO2_X -> PO2 ; 7.5e-13, 700
+ C3H7O2 + HO2_X -> C3H7O2 ; 7.5e-13, 700
+ RO2 + HO2_X -> RO2 ; 8.6e-13, 700
+ MEKO2 + HO2_X -> MEKO2 ; 7.5e-13, 700
+ ALKO2 + HO2_X -> ALKO2 ; 7.5e-13, 700
+ ISOPO2 + HO2_X -> ISOPO2 ; 8.e-13, 700
+ ISOPNO3 + HO2_X -> ISOPNO3 ; 8.e-13, 700
+ MACRO2 + HO2_X -> MACRO2 ; 8.e-13, 700
+ MCO3 + HO2_X -> MCO3 ; 4.30e-13, 1040
+ XO2 + HO2_X -> XO2 ; 8.e-13, 700
+ TOLO2 + HO2_X -> TOLO2 ; 7.5e-13, 700
+ TERPO2 + HO2_X -> TERPO2 ; 7.5e-13, 700
+[usr_HO2_aer] HO2_X -> dummy 
+* Loss of NO2HO2
+ NO2HO2_X + OH -> OH ; 1.3e-12, 380
