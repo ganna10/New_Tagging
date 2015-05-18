@@ -62,6 +62,13 @@ foreach my $reaction (@$all_reactions) {
     next if ($reaction_string =~ /UNITY/);
     my $rate_string = $kpp->rate_string($reaction);
     push @reactions, "$reaction_string : $rate_string";
+    ##get photolysis labels
+    my $reactants = $kpp->reactants($reaction);
+    my $products = $kpp->products($reaction);
+    if ($reaction_string =~ /hv/) { ## process photolysis labels
+        my ($label) = $rate_string =~ /JX\((.*?)\)/;
+        $photolysis{$label} += 1;
+    }
 }
 
 # get tagged CH4 chemistry
@@ -70,6 +77,7 @@ my @ch4_in = <$ch4_in>;
 close $ch4_in;
 foreach my $reaction (@ch4_in) {
     chomp $reaction;
+    next if ($reaction eq "");
     push @reactions, $reaction;
     my ($reactants, $products, $rate) = $reaction =~ /(.*?) = (.*?) : (.*?)$/;
     my @reactants = split / \+ /, $reactants;
@@ -89,6 +97,7 @@ my @toluene_in = <$toluene_in>;
 close $toluene_in;
 foreach my $reaction (@toluene_in) {
     chomp $reaction;
+    next if ($reaction eq "");
     push @reactions, $reaction;
     my ($reactants, $products, $rate) = $reaction =~ /(.*?) = (.*?) : (.*?)$/;
     my @reactants = split / \+ /, $reactants;
@@ -145,7 +154,7 @@ foreach my $label (sort keys %photolysis) {
         $photo_rate[$photo_max] = "J_MCM(41)";
 	} elsif ($label eq "ip_C3H7OOH_CH3COCH3_OH_HO2") {
         $photo_rate[$photo_max] = "J_MCM(41)";
-	} elsif ($label eq "ip_CH3COCH2OOH_CH3CO3_CH2O_OH") {
+	} elsif ($label eq "ip_ROOH_CH3CO3_CH2O_OH") {
         $photo_rate[$photo_max] = "J_MCM(22)";
 	} elsif ($label eq "ip_CH3COCH3_CH3CO3_CH3O2") {
         $photo_rate[$photo_max] = "J_MCM(21)";
