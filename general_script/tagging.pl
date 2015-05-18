@@ -6,13 +6,24 @@ use strict;
 use diagnostics;
 use Mechanism;
 
-my @Ox_reservoirs = qw( O3 NO2 NO3 O O1D HO2 N2O5 NO2NO3 NO3NO2 HO2NO2 NO2HO2 HNO3 );
-my @do_not_tag = qw( N2 O2 H2O OH NO HONO UNITY NA hv SO2 SO3 HSO3 );
+my $Ox_file = "MOZART_Ox_species.txt";
+my @Ox_species; ###use later to tag these species as _X_TAG
+open my $Ox_in, '<:encoding(utf-8)', $Ox_file or die $!;
+my @Ox_lines = <$Ox_in>;
+close $Ox_in;
+foreach my $line (@Ox_lines) {
+     chomp $line;
+     $line =~ s/^\s+|\s+$//g;
+     push @Ox_species, $line;
+}
+
+my @do_not_tag = qw( H2O2 N2 O2 H2O OH NO HONO UNITY NA hv SO2 SO3 HSO3 );
 my %non_chain;
 $non_chain{$_} += 1 foreach (@do_not_tag);
 
 my %tag_species = ( ## add tags and the species that will be tagged
-    INI   => [ qw( O3 ) ],
+    CH4     => [ qw( CH4 ) ],
+    #INI   => [ qw( TOLUENE ) ],
     #XTR   => [ qw( HO2 NO2 ) ],
 );
 
@@ -40,8 +51,8 @@ foreach my $tag (keys %tag_species) {
         &follow_chain($tag, $species);
     }
 }
-foreach my $reaction (keys %chain_reactions) {
-    print "$reaction : $chain_reactions{$_}\n";
+foreach my $reaction (sort keys %chain_reactions) {
+    print "$chain_reactions{$reaction}\n";
 }
 
 #include NO and NO2 emissions 
@@ -210,7 +221,7 @@ sub follow_chain {
 				push @new_products, "$yield $new_species";
 			}
 		}
-		# Tag the produced HO2
+		# Tag the produced HO2 -> repeating the produced yield * HO2_TAG
 		if (defined $products{HO2}) {
 			my $new_ho2 = "HO2_$tag";
 			$new_species{$new_ho2} = 1;
@@ -238,6 +249,7 @@ sub follow_chain {
         # Generate the new reaction and save it, keyed by its new reaction label
         my $rate_string = $mech->rate_string($consumer);
         my $new_reaction_string = "{#$label} $new_reactants = $new_products : $rate_string;\n";
+        print $new_reaction_string;
 		$chain_reactions{$label} = $new_reaction_string;
 		# Perform the same action for all chain-products of this reaction
         foreach my $product (@$products) {
