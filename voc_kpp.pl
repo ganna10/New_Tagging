@@ -1,12 +1,12 @@
 #!/usr/bin/env perl
-#write out .eqn, .spc and mecca.f90 module from tagged inorganic, ch4 and toluene MOZART mechanism, full permutation non-tagged chemistry also included
-#Version 0: Jane Coates 15/5/2015
+#write out .eqn, .spc and mecca.f90 module from tagged inorganic, ch4 and voc MOZART mechanism, full permutation non-tagged chemistry also included
+#Version 0: Jane Coates 20/5/2015
 
 use strict;
 use diagnostics;
 use KPP;
 
-my $ro2_file = "RO2_species.txt.tagged";
+my $ro2_file = "RO2_species.txt";
 open my $ro2_in, '<:encoding(utf-8)', $ro2_file or die $!;
 my @RO2_lines = <$ro2_in>;
 close $ro2_in;
@@ -91,13 +91,13 @@ foreach my $reaction (@ch4_in) {
     }
 }
 
-# get tagged toluene chemistry
-open my $toluene_in, '<:encoding(utf-8)', "toluene_chemistry_tagged.txt" or die $!;
-my @toluene_in = <$toluene_in>;
-close $toluene_in;
-foreach my $reaction (@toluene_in) {
+# get tagged voc chemistry
+open my $voc_in, '<:encoding(utf-8)', "tagged_voc.txt" or die $!;
+my @voc_in = <$voc_in>;
+close $voc_in;
+foreach my $reaction (@voc_in) {
     chomp $reaction;
-    next if ($reaction eq "");
+    next if ($reaction eq "" or $reaction =~ /^#/);
     push @reactions, $reaction;
     my ($reactants, $products, $rate) = $reaction =~ /(.*?) = (.*?) : (.*?)$/;
     my @reactants = split / \+ /, $reactants;
@@ -184,6 +184,8 @@ foreach my $label (sort keys %photolysis) {
         $photo_rate[$photo_max] = "J_MCM(41)";
 	} elsif ($label eq "ip_TERPOOH_OH_CH3COCH3_HO2_MVK_MACR") {
         $photo_rate[$photo_max] = "J_MCM(41)";
+    } else {
+        print "$label\n";
     }
     $photo_max++;
 }
@@ -205,7 +207,7 @@ foreach my $line (@photo_lines) {
 my $n_j_mozart = $#jval_a + 1;
 
 #add deposition
-open my $dep_in, "<:encoding(utf-8)", "MOZART_deposition_velocities.txt.toluene" or die $!;
+open my $dep_in, "<:encoding(utf-8)", "MOZART_deposition_velocities.txt" or die $!;
 my @deposition_lines = grep /^%/, <$dep_in>;
 close $dep_in;
 my %deposition_velocities;
@@ -221,11 +223,10 @@ foreach my $reaction (@deposition_lines) {
 #print "$_ : $deposition_velocities{$_}\n" foreach keys %deposition_velocities;
 
 #add emissions
-#open my $primary_in, '<:encoding(utf-8)', "primary_species.txt" or die $!;
-#my @primary_species = <$primary_in>;
-#close $primary_in;
-#chomp $_ foreach (@primary_species);
-my @primary_species = qw( NO NO2 CO CH4 CH4_CH4 TOLUENE TOLUENE_INI);
+open my $primary_in, '<:encoding(utf-8)', "primary_species.txt" or die $!;
+my @primary_species = <$primary_in>;
+close $primary_in;
+chomp $_ foreach (@primary_species);
 push @reactions, "UNITY = $_ : MOZART_EMIS(KPP_$_)/(zmbl*100.)" foreach (@primary_species) ;
 #print "$_\n" foreach @reactions;
 
@@ -245,20 +246,20 @@ my $no_of_reactions = @reactions;
 my $label_length = length $no_of_reactions;
 
 #output files
-my $eqn_file = "mozart.eqn.toluene";
-my $mecca_file = "mecca_mozart.f90.toluene";
-my $spc_file = "mozart.spc.toluene";
+my $eqn_file = "mozart.eqn.tagged";
+my $mecca_file = "mecca_mozart.f90.tagged";
+my $spc_file = "mozart.spc.tagged";
 
 #write spc file
 open my $out_spc, ">:encoding(utf-8)", $spc_file or die $!;
-print $out_spc "{ Created automatically from tagged inorganic, ch4 and toluene chemistry }\n";
+print $out_spc "{ Created automatically from tagged inorganic, ch4 and voc chemistry }\n";
 print $out_spc "#DEFVAR\n";
 print $out_spc "$_ = IGNORE ; {\@IGNORE} {}\n" for @species;
 close $out_spc;
 
 #Write eqn file
 open my $eqn_out, '>:encoding(utf-8)', $eqn_file or die $!;
-print $eqn_out "// inorganic, ch4 and toluene chemistry \n";
+print $eqn_out "// inorganic, ch4 and voc chemistry \n";
 print $eqn_out "#INLINE F95_DECL\n";
 print $eqn_out "      REAL(dp) :: temp\n";
 print $eqn_out "      REAL(dp) :: press\n";
@@ -288,7 +289,7 @@ close $eqn_out;
 
 #write MECCA_MOZART module
 open my $mecca_out, '>:encoding(utf-8)', $mecca_file or die $!;
-print $mecca_out "!inorganic, ch4 and toluene chemistry\n";
+print $mecca_out "!inorganic, ch4 and voc chemistry\n";
 print $mecca_out "MODULE MECCA_MOZART\n";
 print $mecca_out "USE messy_mecca1_kpp_g_mem\n";
 print $mecca_out "\n";
