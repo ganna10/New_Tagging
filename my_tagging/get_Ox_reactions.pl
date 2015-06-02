@@ -1,6 +1,8 @@
 #! /usr/bin/env perl
 # get Ox reactions for tagging
 # Version 0: Jane Coates 29/5/2015
+#
+### next version also output reaction number
 
 use strict;
 use diagnostics;

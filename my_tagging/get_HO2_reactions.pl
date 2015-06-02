@@ -1,6 +1,8 @@
 #! /usr/bin/env perl
 # Get HO2 reactions from my mozart chemistry
 # Version 0: Jane Coates 27/5/2015
+#
+### next version also output reaction number
 
 use strict;
 use diagnostics;

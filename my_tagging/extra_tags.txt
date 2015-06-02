@@ -1,5 +1,5 @@
-#extra tags for production of HO2 and NO2 from inorganic reactions 
-NO + NO = NO2_X_XTR + NO2_X_XTR + NO + NO : 3.3D-39*EXP(530/TEMP)*C(KPP_O2) ;
-H2O2 + OH = HO2_X_XTR + H2O2 + OH : 2.9D-12*EXP(-160/TEMP) ;
-HONO + OH = NO2_X_XTR + HONO + OH : 2.5D-12*EXP(260/TEMP) ;
-HSO3 = HO2_X_XTR + SO3 : 1.3D-12*EXP(-330/TEMP)*C(KPP_O2) ;
+# extra tags for VOC tagging
+{#R012} NO + NO = NO2_X_XTR + NO2_X_XTR + NO + NO : 3.3D-39*EXP(530/TEMP)*C(KPP_O2) ;
+{#R020} H2O2 + OH = HO2_X_XTR + H2O2 + OH : 2.9D-12*EXP(-160/TEMP) ;
+{#R031} HONO + OH = NO2_X_XTR + HONO + OH : 2.5D-12*EXP(260/TEMP) ;
+{#R035} HSO3 = HO2_X_XTR + SO3 : 1.3D-12*EXP(-330/TEMP)*C(KPP_O2) ;
