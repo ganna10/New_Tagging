@@ -14,20 +14,21 @@ my @ox_tags = (@ho2_tags, qw(INI));
 #my @common_voc_tags = qw(TAG);
 my %species_tags = (
 	CH4      => [ qw(CH4) ],
+	BIGALK   => [ qw(BIGALK) ],
+	BIGENE   => [ qw(BIGENE) ],
+	C2H4     => [ qw(C2H4) ],
+	C2H6     => [ qw(C2H6) ],
+	C3H6     => [ qw(C3H6) ],
+	C3H8     => [ qw(C3H8) ],
+	ISOP     => [ qw(ISOP) ],
+	TOLUENE  => [ qw(TOLUENE) ],
+    CO       => [ qw(INI) ],
 );
-#	BIGALK   => [ qw(BIGALK) ],
-#	BIGENE   => [ qw(BIGENE) ],
-#	C2H4     => [ qw(C2H4) ],
-#	C2H6     => [ qw(C2H6) ],
-#	C3H6     => [ qw(C3H6) ],
-#	C3H8     => [ qw(C3H8) ],
-#	ISOP     => [ qw(ISOP) ],
-#	TOLUENE  => [ qw(TOLUENE) ],
 
 # Get a list of all unique VOC tag names
 my (%voc_tags, @emitted_species);
 foreach my $species (keys %species_tags) {
-    push @emitted_species, $species;
+    push @emitted_species, $species; ## used for emission reactions
 	foreach my $tag (@{ $species_tags{$species} }) {
 		$voc_tags{$tag} = 1;
 	}
@@ -102,7 +103,7 @@ foreach my $species (keys %species_tags) {
 	my ($consumers) = $mech->consuming($species);
 	warn "No reactions consuming $species\n" unless (@$consumers > 0);
 	foreach my $tag (@{ $species_tags{$species} }) {
-		&follow_chain($tag, $species);
+		&tag_voc($tag, $species);
 	}
 }
 
@@ -139,9 +140,10 @@ foreach my $spc (@emitted_species) {
         my $rate_string = $mech->rate_string($reaction);
         my $label = $reaction;
         foreach my $tag (@voc_tags) {
-            $label .= "_$tag";
-            $string =~ s/\b($spc)\b/$1_$tag/g;
-            my $new_reaction = "{#$label} $string : $rate_string ;\n";
+            next unless ($tag eq $spc);
+            my $tagged_label = "${label}_$tag";
+            (my $tagged_string = $string) =~ s/\b($spc)\b/$1_$tag/g;
+            my $new_reaction = "{#$tagged_label} $tagged_string : $rate_string ;\n";
             $all_reactions{$new_reaction} = 1;
         } 
     }
@@ -203,8 +205,58 @@ open my $RO2_output, '>:encoding(utf-8)', $new_RO2_file or die $!;
 print $RO2_output @lines;
 close $RO2_output;
 
+#create MECCA_MOZART.f90 module including the tagged species
+my $mecca_file = "${file_base}_MECCA_MOZART.f90";
+@lines = ();
+open my $mecca_in, '<:encoding(utf-8)', $mecca_file or die $!;
+while (<$mecca_in>) {
+    push @lines, $_;
+    if ($_ =~ /PRIVATE :: INI_UNITY/) {
+        foreach my $spc (sort keys %new_species) {
+            push @lines, "REAL(dp), PRIVATE :: INI_$spc = 0.\n";
+        }
+    } elsif ($_ =~ /PRIVATE :: EMIS_UNITY/) {
+        foreach my $spc (sort keys %new_species) {
+            push @lines, "REAL(dp), PRIVATE :: EMIS_$spc = 0.\n";
+        }
+    } elsif ($_ =~ /PRIVATE :: FIXED_UNITY/) {
+        foreach my $spc (sort keys %new_species) {
+            push @lines, "REAL(dp), PRIVATE :: FIXED_$spc = 0.\n";
+        }
+    } elsif ($_ =~ /&INI_CO2,&/) {
+        foreach my $spc (sort keys %new_species) {
+            push @lines, "&INI_$spc,&\n";
+        }
+    } elsif ($_ =~ /MOZART_INI\(kpp_UNITY\)/) {
+        foreach my $spc (sort keys %new_species) {
+            push @lines, "MOZART_INI(kpp_$spc) = INI_$spc\n";
+        }
+    } elsif ($_ =~ /&EMIS_CO2,&/) {
+        foreach my $spc (sort keys %new_species) {
+            push @lines, "&EMIS_$spc,&\n";
+        }
+    } elsif ($_ =~ /MOZART_EMIS\(kpp_UNITY\)/) {
+        foreach my $spc (sort keys %new_species) {
+            push @lines, "MOZART_EMIS(kpp_$spc) = EMIS_$spc\n";
+        }
+    } elsif ($_ =~ /&FIXED_CO2,&/) {
+        foreach my $spc (sort keys %new_species) {
+            push @lines, "&FIXED_$spc,&\n";
+        }
+    } elsif ($_ =~ /MOZART_FIXED\(kpp_UNITY\)/) {
+        foreach my $spc (sort keys %new_species) {
+            push @lines, "MOZART_FIXED(kpp_$spc) = FIXED_$spc\n";
+        }
+    }
+}
+close $mecca_in;
+my $new_mecca_file = $mecca_file . $suffix;
+open my $mecca_out, '>:encoding(utf-8)', $new_mecca_file or die $!;
+print $mecca_out @lines;
+close $mecca_out;
+
 # Recursively follow the oxidation of a parent species, generating additional reactions to tag all intermediates
-sub follow_chain {
+sub tag_voc {
     my @history = @_;
     my $tag = $history[0];
     my $species = $history[-1];
@@ -316,7 +368,12 @@ sub follow_chain {
 				push @new_products, "$yield $new_species";
 			}
 		}
-		my $new_products = join ' + ', @new_products;
+        my $new_products;
+        if (@new_products == 0) {
+            $new_products = "UNITY";
+        } else {
+            $new_products = join ' + ', @new_products;
+        }
 		# Generate the new reaction and save it, keyed by its new reaction label
         my $rate_string = $mech->rate_string($consumer);
 		my $new_reaction_string = "{#$label} $new_reactants = $new_products : $rate_string;\n";
@@ -324,7 +381,7 @@ sub follow_chain {
 		# Perform the same action for all chain-products of this reaction
         foreach my $product (@$products) {
             unless ($non_chain{$product} or defined $history{$product}) {
-                &follow_chain(@history, $product);
+                &tag_voc(@history, $product);
             }
         }
     }
@@ -341,13 +398,14 @@ sub tag_non_voc {
         my $reaction_string = $kpp->reaction_string($reaction);
         my $rate_string = $kpp->rate_string($reaction);
         my $label;
-		foreach my $tag (@$tags) { # Make a copy of the ox tagged reactions for each tag
+        foreach my $tag (@$tags) { # Make a copy of the ox tagged reactions for each tag
             $label = "${reaction}_$tag";
+            (my $tagged_reaction_string = $reaction_string) =~ s/_X\b/_X_$tag/g;
             foreach my $tagged_species (keys %$tagged_species) {
-                $reaction_string =~ s/\b($tagged_species)\b/$1_$tag/g;
-				$new_species->{"$1_$tag"} = 1 if defined $1;
+                (my $string_search = $reaction_string) =~ s/\b($tagged_species)\b/$1_$tag/g;
+				$new_species->{"$1_$tag"} = 1 if (defined $1);
 			}
-            my $new_reaction = "{#$label} $reaction_string : $rate_string ;\n";
+            my $new_reaction = "{#$label} $tagged_reaction_string : $rate_string ;\n";
             push @new_reactions, $new_reaction;
 		}
     }
@@ -367,13 +425,17 @@ sub tag_extra {
         my $reaction_string = $xtr->reaction_string($reaction);
         my $rate_string = $xtr->rate_string($reaction);
 		my @tags = $reaction_string =~ /X_([A-Z]+)/g;
+        my $products = $xtr->products($reaction);
+        foreach my $product (@$products) {
+            $new_species{$product} = 1 if ($product =~ /_X_/);
+        }
         my $label;
 		foreach my $tag (@tags) { 
             die "Tag \"$tag\" in file $file not previously defined" unless (defined $ox_tags{$tag});
             $label = "${reaction}_$tag";
+            my $new_reaction = "{#$label} $reaction_string : $rate_string ;\n";
+            push @new_reactions, $new_reaction;
 		}
-        my $new_reaction = "{#$label} $reaction_string : $rate_string ;\n";
-        push @new_reactions, $new_reaction;
 	}
 	return @new_reactions;
 }

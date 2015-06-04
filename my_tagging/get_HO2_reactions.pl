@@ -3,6 +3,7 @@
 # Version 0: Jane Coates 27/5/2015
 #
 ### next version also output reaction number
+### rate of HO2_X + HO2 = HO2 has to be multiplied by 2
 
 use strict;
 use diagnostics;

@@ -60,7 +60,7 @@
 {#R005_1} O + O3_X = O + UNITY : 8.0D-12*EXP(-2060/TEMP)  ;
 {#R009_2} O1D_X = O_X : 3.2D-11*EXP(67/TEMP)*C(KPP_O2)+2.0D-11*EXP(130/TEMP)*C(KPP_N2)  ;
 {#R016_2} O1D_X = UNITY : 2.14D-10*C(KPP_H2O)  ;
-{#R017_2} O3_X + OH = OH + UNITY : 1.70D-12*EXP(-940/TEMP)  ;
+{#R017_2} O3_X + OH = OH + HO2_X : 1.70D-12*EXP(-940/TEMP)  ;
 {#R039_2} O3_X + hv = O1D_X : JX(ip_O3_O1D)  ;
 {#R040_2} O3_X + hv = O_X : JX(ip_O3_O)  ;
 {#R220_2} O3_X = UNITY : MOZART_VD(KPP_O3)/(zmbl*100.)   ;

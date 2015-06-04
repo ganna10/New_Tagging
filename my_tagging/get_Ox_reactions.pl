@@ -3,6 +3,7 @@
 # Version 0: Jane Coates 29/5/2015
 #
 ### next version also output reaction number
+### error in O3_X + OH = OH + HO2_x reaction, current products are OH + UNITY
 
 use strict;
 use diagnostics;
@@ -11,7 +12,7 @@ use KPP;
 my $eqn = "my_mozart.eqn";
 my $kpp = KPP->new($eqn);
 my (%weights, %reactions);
-my @Ox = qw( O3 O O1D NO2 NO3 N2O5 HNO3 PAN MPAN ONIT ONITR ISOPNO3 HO2NO2 ) ;
+my @Ox = qw( O3 O O1D NO2 NO3 N2O5 HNO3 PAN MPAN ONIT ONITR ISOPNO3 HO2NO2 HO2 ) ;
 my %families = ( 
     "Ox" => [ @Ox ],
 );
