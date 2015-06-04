@@ -1,9 +1,7 @@
 #! /usr/bin/env perl
 # Get HO2 reactions from my mozart chemistry
 # Version 0: Jane Coates 27/5/2015
-#
-### next version also output reaction number
-### rate of HO2_X + HO2 = HO2 has to be multiplied by 2
+# Version 1: Jane Coates 4/6/2015 output of reaction number and rate of HO2_X + HO2 = HO2 has to be multiplied by 2
 
 use strict;
 use diagnostics;
@@ -23,7 +21,7 @@ foreach my $reaction (@$producers) {
     $reactants = "NO2HO2_X";
     $products = "HO2_X";
     my $rate_string = $kpp->rate_string($reaction);
-    my $string = $reactants . " = " . $products . " : " . $rate_string . " ;";
+    my $string = "{#${reaction}_1} " . $reactants . " = " . $products . " : " . $rate_string . " ;";
     $producers{$string} += 1;
 }
 
@@ -40,7 +38,8 @@ foreach my $reaction (@$consumers) {
         ($products = $reactants) =~ s/HO2_X//;
         $products =~ s/ \+ //;
     }
-    my $string = $reactants . " = " . $products . " : " . $rate_string . " ;";
+    $rate_string = "2*($rate_string)" if ($reactants eq "HO2_X + HO2");
+    my $string = "{#${reaction}_1} " . $reactants . " = " . $products . " : " . $rate_string . " ;";
     $consumers{$string} += 1;
 }
 
@@ -51,6 +50,6 @@ print $out "$_\n" foreach (sort keys %producers);
 print $out "#HO2 consumers\n";
 print $out "$_\n" foreach (sort keys %consumers);
 print $out "#NO2HO2 consumers\n";
-print $out "NO2HO2_X + OH = OH : 3.2D-13*EXP(690/TEMP)*1.0 ;\n";
-print $out "NO2HO2_X = UNITY : MOZART_VD(KPP_HO2NO2)/(zmbl*100.) ;\n";
+print $out "{#R029_1} NO2HO2_X + OH = OH : 3.2D-13*EXP(690/TEMP)*1.0 ;\n";
+print $out "{#R211_1} NO2HO2_X = UNITY : MOZART_VD(KPP_HO2NO2)/(zmbl*100.) ;\n";
 close $out;
