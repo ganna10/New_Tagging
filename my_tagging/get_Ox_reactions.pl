@@ -1,9 +1,7 @@
 #! /usr/bin/env perl
 # get Ox reactions for tagging
 # Version 0: Jane Coates 29/5/2015
-#
-### next version also output reaction number
-### error in O3_X + OH = OH + HO2_x reaction, current products are OH + UNITY
+# Version 1: Jane Coates 4/6/2015 output of reaction number, automatic counter for multiple reactions, corrected O3_X + OH = OH + HO2_x reaction
 
 use strict;
 use diagnostics;
@@ -11,8 +9,8 @@ use KPP;
 
 my $eqn = "my_mozart.eqn";
 my $kpp = KPP->new($eqn);
-my (%weights, %reactions);
-my @Ox = qw( O3 O O1D NO2 NO3 N2O5 HNO3 PAN MPAN ONIT ONITR ISOPNO3 HO2NO2 HO2 ) ;
+my (%weights, %reactions, %counter);
+my @Ox = qw( O3 O O1D NO2 NO3 N2O5 HNO3 PAN MPAN ONIT ONITR ISOPNO3 HO2NO2 ) ;
 my %families = ( 
     "Ox" => [ @Ox ],
 );
@@ -27,6 +25,7 @@ foreach my $ox (@Ox) {
     my $reactions = $kpp->consuming($ox);
     foreach my $reaction (@$reactions) {
         my $reaction_string = $kpp->reaction_string($reaction);
+        $counter{$reaction_string} += 1;
         my $rate_string = $kpp->rate_string($reaction);
         my ($reactants, $products) = split / = /, $reaction_string;
         $reactants =~ s/\b$ox\b/${ox}_X/;
@@ -58,18 +57,24 @@ foreach my $ox (@Ox) {
             }
         }
         my $final_products = join ' + ', @final_products;
-        $final_products = "UNITY" if ($final_products eq "");
+        if ($final_products eq "" and $reactants eq "O3_X + OH") {
+            $final_products = "HO2_X";
+        } elsif ($final_products eq "") {
+            $final_products = "UNITY";
+        }
         
+        my $counter = 2;
+        $counter++ if ($counter{$reaction_string} > 1);
         if (defined $non_tagged_reactant and $reactants eq "NO2 + O_X" and $final_products eq "NO3_X") {
-            $string = "$reactants = $non_tagged_reactant : $rate_string ;";
+            $string = "{#${reaction}_$counter} $reactants = $non_tagged_reactant : $rate_string ;";
         } elsif (defined $non_tagged_reactant and $reactants eq "NO2 + O3_X" and $final_products eq "NO3_X") {
-            $string = "$reactants = $non_tagged_reactant : $rate_string ;";
+            $string = "{#${reaction}_$counter} $reactants = $non_tagged_reactant : $rate_string ;";
         } elsif (defined $non_tagged_reactant and $reactants eq "NO2_X + NO3" and $final_products eq "NO2_X") {
-            $string = "$reactants = $non_tagged_reactant : $rate_string ;";
+            $string = "{#${reaction}_$counter} $reactants = $non_tagged_reactant : $rate_string ;";
         } elsif (defined $non_tagged_reactant) {
-            $string = "$reactants = $non_tagged_reactant + $final_products : $rate_string ;";
+            $string = "{#${reaction}_$counter} $reactants = $non_tagged_reactant + $final_products : $rate_string ;";
         } else {
-            $string = "$reactants = $final_products : $rate_string ;";
+            $string = "{#${reaction}_$counter} $reactants = $final_products : $rate_string ;";
         }
         $reactions{$string} += 1;
     }
